@@ -19,6 +19,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 // import { saveDataInPhone } from "./localStorage";
 import {TouchableOpacity} from 'react-native';
+import { SignUpUser } from './duck/operations';
+import RoutesKey from '../../Components/Navigation/Route/routesKey';
 // import Axios from "axios"
 
 export default function SignUp(props) {
@@ -30,38 +32,20 @@ export default function SignUp(props) {
   const [phoneNo, setPhoneNo] = useState('');
   const [pincode, setPincode] = useState('');
   const [conformPincode, setConformPincode] = useState('');
-  const [udata, setUdata] = useState([]);
 
-  // useEffect(() => {
-  //     Axios.get("https://smartfarm012.herokuapp.com/getUser").then(
-  //         (reponse) => {
-  //             const newdata = reponse.data
-  //             setUdata(newdata)
-  //         })
-  // }, [])
-  // const userEmail = udata.filter(x => x.email == userName)
-  console.log(udata);
-  const login = async () => {
-    // try {
-    //     if (email !== '' && phoneNo != '' && userName != '' && pincode === conformPincode) {
-    //         auth()
-    //             .createUserWithEmailAndPassword(email, pincode)
-    //             .then(
-    //                 Axios.post('https://smartfarm012.herokuapp.com/createUser', {
-    //                     username: userName,
-    //                     email: email,
-    //                     phoneNo: phoneNo,
-    //                     password: pincode,
-    //                     userType: 'user'
-    //                 })
-    //             ).then((res) => console.log('res', res))
-    //     }
-    //     if (userName == '' || pincode == '' || email == '' || phoneNo == '') {
-    //         alert('Password Not Match Or Field Are Empty')
-    //     }
-    // } catch (error) {
-    //     alert(error)
-    // }
+  const Login = () => {
+    let data = {
+      username: userName,
+      email: email,
+      phoneNo: phoneNo,
+      password: pincode,
+      userType: 'user',
+    };
+    if(pincode == conformPincode){
+      SignUpUser(data).then(() => navigation.navigate(RoutesKey.SIGNIN))
+    }else{
+      alert('Password Wrong')
+    }
   };
 
   return (
@@ -248,7 +232,7 @@ export default function SignUp(props) {
                     borderRadius="30"
                     h="48px"
                     onPress={
-                      () => login()
+                      () => Login()
                       // authOperations.login(data, dispatch).then((res) => {
                       //   if(res.role == 'student'){
                       //   }

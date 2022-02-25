@@ -10,7 +10,7 @@ import {
   Button,
   Text,
 } from 'native-base';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import styles from './SignIn.style';
 import {useNavigation} from '@react-navigation/native';
@@ -18,26 +18,30 @@ import {useNavigation} from '@react-navigation/native';
 // import { SignInUser } from '../duck/operations';
 import {Alert, ActivityIndicator} from 'react-native';
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
+import {SignInUser} from './duck/operations';
 
 export default function SignIn() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  let data = {
-    email: email,
-    password: password,
-  };
+  const [uData, setUdata] = useState([]);
+
+  // const Email = uData.filter(x => x.email == email).map((data) => data.email)
+
   const Login = () => {
-    navigation.navigate(RoutesKey.BOTTOMNAV);
-    // SignInUser(data).then((res) =>{
-    //     console.log('login',res.data)
-    //     if(res.data.status == true) {
-    //     }else if(res.data.status == false) {
-    //         // alert(res.message)
-    //         Alert.alert('Warning!', res.data.message);
-    //     }
-    // })
+    let data = {
+      email: email,
+      password: password,
+    };
+    SignInUser(data).then(async res  => {
+      if(res.success == true) {
+        await navigation.navigate(RoutesKey.BOTTOMNAV);
+      }
+      setUdata(res);
+    });
   };
+
+  console.log(uData);
   return (
     <ScrollView bg="#f6f6f1">
       <Center mt="5" px="3">
