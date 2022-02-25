@@ -10,11 +10,9 @@ import Profile from '../../../Packages/Profile/Profile';
 // import TransportBottomNav from "./TransportBottomNav";
 // import CatringBottomNav from "./CatringBottomNav";
 import {useNavigation} from '@react-navigation/native';
-import {getDataFromPhone} from '../../../utils/localStore';
-import AdminHome from '../../../Packages/AdminHome/AdminHome';
-import AddVentor from '../../../Packages/AddVentor/AddVentor';
+import DoctorHome from '../../../Packages/DoctorHome/DoctorHome';
 
-export default function AdminBottomNav() {
+export default function DoctorBottomNav() {
     const Tab = createBottomTabNavigator();
     return (
         <Tab.Navigator
@@ -23,18 +21,8 @@ export default function AdminBottomNav() {
             }}
         >
             <Tab.Screen
-                name="AddVentor"
-                component={AddVentor}
-                options={{
-                    tabBarShowLabel: false,
-                    headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="shopping" color={color} size={size} />),
-                }}
-            />
-            <Tab.Screen
                 name="Home"
-                component={AdminHome}
+                component={DoctorHome}
                 options={{
                     tabBarShowLabel: false,
                     headerShown: false,

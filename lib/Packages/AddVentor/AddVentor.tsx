@@ -19,11 +19,11 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 // import { saveDataInPhone } from "./localStorage";
 import {TouchableOpacity} from 'react-native';
-import { SignUpUser } from './duck/operations';
+import { SignUpUser } from '../SignUp/duck/operations';
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
 // import Axios from "axios"
 
-export default function SignUp(props) {
+export default function AddVentor(props) {
   const [show, setShow] = React.useState(false);
   const [show1, setShow1] = React.useState(false);
   const navigation = useNavigation();
@@ -39,10 +39,10 @@ export default function SignUp(props) {
       email: email,
       phoneNo: phoneNo,
       password: pincode,
-      userType: 'user',
+      userType: 'doctor',
     };
     if(pincode == conformPincode){
-      SignUpUser(data).then(() => navigation.navigate(RoutesKey.SIGNIN))
+      SignUpUser(data)
     }else{
       alert('Password Wrong')
     }
@@ -63,7 +63,7 @@ export default function SignUp(props) {
                 Welcome to DAYD
               </Text>
               <Heading mt="30px" mb="20px" size="sm">
-                Sign up
+                Add Vendor
               </Heading>
 
               <Input
@@ -233,20 +233,10 @@ export default function SignUp(props) {
                     h="48px"
                     onPress={
                       () => Login()
-                      // authOperations.login(data, dispatch).then((res) => {
-                      //   if(res.role == 'student'){
-                      //   }
-                      // }
-                      // )
                     }>
                     Sign Up!
                   </Button>
-                  <HStack mt="6" justifyContent="center">
-                    <Text fontSize="sm" color="coolGray.600">
-                      All ready have Account{' '}
-                    </Text>
-                    <Link onPress={() => navigation.pop()}>Sign in</Link>
-                  </HStack>
+                 
                 </VStack>
               </Box>
             </Center>

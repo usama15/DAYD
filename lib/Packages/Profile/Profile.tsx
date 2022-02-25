@@ -41,8 +41,9 @@ export default function profile() {
   const navigation = useNavigation();
 
   const logout = async () => {
-    removeStorage('UserType');
-    removeStorage('Token');
+    removeStorage('UserType'),
+    removeStorage('Token'),
+    removeStorage('User'),
     navigation.navigate(RoutesKey.WELCOME)
     //   try {
     //     await auth().signOut().then(navigation.navigate('signin'))

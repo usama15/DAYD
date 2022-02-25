@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import Routeskey from '../../Components/Navigation/Route/routesKey';
 import {getDataFromPhone} from '../../utils/localStore';
 // import { getDataFromPhone } from '../../utils/localStore'
-
+let udata = ''
 export default function Welcome() {
   const navigation = useNavigation();
   useEffect(() => {
@@ -13,21 +13,21 @@ export default function Welcome() {
   }, []);
 
   const chkUser = async () => {
-    let data = await getDataFromPhone('Token')
+    await getDataFromPhone('User').then((res) => udata = (JSON.parse(res)))
 
-    if(data !== ''){
+    if(udata?.success == true){
         navigation.navigate(Routeskey.BOTTOMNAV)
-    }else if(data == '' ){
+    }else if(udata == ''){
         navigation.navigate(Routeskey.SIGNIN)
     }
-    console.log("data",data)
+    console.log("data",udata)
   };
   return (
     <Center mt="5" px="3">
       <Box w="100%" p="10px">
         <Box style={styles.imgBox}>
-          <Text fontSize="64">DAYD</Text>
-          {/* <Image source={require('../../assets/LogoNoBackground2.png')} alt="lgo" /> */}
+          {/* <Text fontSize="64">DAYD</Text> */}
+          <Image source={require('../../Components/Assets/DAYD.png')} alt="lgo" />
         </Box>
         <Button
           style={styles.btn}

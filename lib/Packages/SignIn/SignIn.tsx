@@ -9,6 +9,7 @@ import {
   VStack,
   Button,
   Text,
+  HStack,
 } from 'native-base';
 import React, {useState, useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -33,8 +34,8 @@ export default function SignIn() {
       email: email,
       password: password,
     };
-    SignInUser(data).then(async res  => {
-      if(res.success == true) {
+    SignInUser(data).then(async res => {
+      if (res.success == true) {
         await navigation.navigate(RoutesKey.BOTTOMNAV);
       }
       setUdata(res);
@@ -122,6 +123,14 @@ export default function SignIn() {
                 Login
               </Button>
             </VStack>
+          <HStack mt="6" justifyContent="center">
+            <Text fontSize="sm" color="coolGray.600">
+              For Doctor{' '}
+            </Text>
+            <Link onPress={() => navigation.navigate(RoutesKey.DOCTORREGISTAR)}>
+              Registration
+            </Link>
+          </HStack>
           </Box>
         </Box>
       </Center>

@@ -10,6 +10,7 @@ const SignInUser = async (data) => {
         resolve(responseData);
         saveDataInPhone('Token', (responseData.token));
         saveDataInPhone('UserType', (responseData.userType));
+        saveDataInPhone('User', JSON.stringify(responseData));
         
       },
       err => {

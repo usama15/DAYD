@@ -10,7 +10,7 @@ const SignUpUser = async (data) => {
         resolve(responseData);
       },
       err => {
-        let errorResponse = err.response;
+        let errorResponse = err.response.data;
         reject(errorResponse);
         alert(errorResponse.text);
       },

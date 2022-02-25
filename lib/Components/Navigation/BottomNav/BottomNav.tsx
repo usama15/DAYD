@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import Dashboard from '../../../Packages/DashBoard/Dashboard';
 import {getDataFromPhone} from '../../../utils/localStore';
 import AdminBottomNav from './AdminBottomNav';
+import DoctorBottomNav from './DoctorBottomNav';
 
 const userNav = () => {
   const Tab = createBottomTabNavigator();
@@ -73,6 +74,10 @@ const BottomNav = () => {
   }, []);
   console.log('nav', data);
   // const userData = useSelector((state) => state.user.initialState);
-  return data == 'admin' ? AdminBottomNav() : userNav();
+  return data == 'admin'
+    ? AdminBottomNav()
+    : data == 'doctor'
+    ? DoctorBottomNav()
+    : userNav();
 };
 export default BottomNav;
