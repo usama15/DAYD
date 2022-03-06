@@ -6,44 +6,27 @@ const theme = extendTheme({
 
         // Add new color
         primary: {
-            100: '#C5E4F3',
-            200: '#A2D4EC',
-            300: '#7AC1E4',
-            400: '#47A9DA',
-            500: '#25A9B6',
-            600: '#007AB8',
-            700: '#006BA1',
-            800: '#005885',
-            900: '#2E3131',
+            100: '#ec4899',
+            200: '#FFC0CB',
+
         },
 
+        secondary: {
+            100: '#FFC0CB',
+        },
         green: {
-            100: '#6CC5FF',
-            200: '#6CC5FF',
-            300: '#25A9B6',
-            400: '#25A9B6',
-            500: '#25A9B6',
-            600: '#25A9B6',
-            700: '#25A9B6',
-            800: '#25A9B6',
-            900: '#25A9B6',
+            100: '#FFC0CB',
         },
-
-
+        
+        
         border: {
-            100: '#828282',
-            200: '#A2D4EC',
-            300: '#7AC1E4',
-            400: '#47A9DA',
-            500: '#25A9B6',
-            600: '#007AB8',
-            700: '#006BA1',
-            800: '#005885',
-            900: '#2E3131',
+            100: '#FFC0CB',
+            
         },
-        // amber: {
-        //     400: '#d97706',
-        // },
+        amber: {
+            100: '#FFC0CB',
+            // 400: '#d97706',
+        },
     },
 
     components: {
@@ -53,12 +36,12 @@ const theme = extendTheme({
                 rounded: 'md',
             },
             defaultProps: {
-                colorScheme: 'primary',
+                colorScheme: 'secondary',
                 borderRadius: '30px',
-                _text:{
-                    color: '#ffffff'
+                _text: {
+                    // color: '#ffffff'
                 },
-                bg: '#6CC5FF'
+                bg: 'primary.200'
             },
         },
         Box: {
@@ -81,7 +64,7 @@ const theme = extendTheme({
             // Can pass also function, giving you access theming tools
             baseStyle: ({ colorMode }) => {
                 return {
-                    color: colorMode === 'dark' ? 'red.300' : 'primary.900',
+                    color: colorMode === 'dark' ? 'red.200' : 'primary.100',
                     fontWeight: 'bold',
                     fontSize: '24px',
                     textAlign: 'center',
@@ -93,8 +76,13 @@ const theme = extendTheme({
             // Can pass also function, giving you access theming tools
             baseStyle: ({ colorMode }) => {
                 return {
-                    borderColor: 'border.100',
+                    borderColor: 'primary.200',
                     borderRadius: '30px',
+                    colorScheme: 'secondary',
+                    _focus:{
+                        borderColor: 'primary.100',
+                        
+                    }
                 };
             },
         },

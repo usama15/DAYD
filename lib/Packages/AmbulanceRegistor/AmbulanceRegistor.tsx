@@ -1,5 +1,6 @@
+import {TouchableOpacity} from 'react-native';
+import RoutesKey from '../../Components/Navigation/Route/routesKey';
 import React, {useState, useEffect} from 'react';
-// 1. import `NativeBaseProvider` component
 import {
   Box,
   Heading,
@@ -15,23 +16,64 @@ import {
   ScrollView,
 } from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-// import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
-// import { saveDataInPhone } from "./localStorage";
-import {TouchableOpacity} from 'react-native';
-import {SignUpUser} from './duck/operations';
-import RoutesKey from '../../Components/Navigation/Route/routesKey';
-// import Axios from "axios"
-
-export default function SignUp(props) {
+import {launchImageLibrary} from 'react-native-image-picker';
+import {postAmbulanceData} from './duck/operations';
+const AmbulanceRegistor = () => {
   const [show, setShow] = React.useState(false);
   const [show1, setShow1] = React.useState(false);
   const navigation = useNavigation();
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
+  const [cnicNumber, setCnicNumber] = useState('');
+  const [vehicleNumber, setVehicleNumber] = useState('');
+  const [licenseNumber, setLicenseNumber] = useState('');
+  const [Address, setAddress] = useState('');
   const [pincode, setPincode] = useState('');
   const [conformPincode, setConformPincode] = useState('');
+  const [Img, setImg] = useState('');
+  const uploadImgOne = () => {
+    const options = {
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const uri = response.assets[0].uri;
+        const type = response.assets[0].type;
+        const name = response.assets[0].fileName;
+        const source = {
+          uri,
+          type,
+          name,
+        };
+        cloudinaryUploadOne(source);
+      }
+    });
+  };
+
+  const cloudinaryUploadOne = image => {
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'hl08r4ih');
+    data.append('cloud_name', 'da6xurnwg');
+    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
+      method: 'post',
+      body: data,
+    })
+      .then(res => res.json())
+      .then(data => {
+        setImg(data.url);
+      })
+      .then(async () => await alert('Submit'))
+      .catch(err => {
+        alert(err);
+      });
+  };
 
   const Login = () => {
     let data = {
@@ -39,10 +81,16 @@ export default function SignUp(props) {
       email: email,
       phoneNo: phoneNo,
       password: pincode,
-      userType: 'user',
+      userType: 'ambulance',
+      cnicNumber: cnicNumber,
+      vehicleNumber: vehicleNumber,
+      LicenseNumber: licenseNumber,
+      Address: Address,
+      drCert: Img,
     };
+    console.log(data);
     if (pincode == conformPincode) {
-      SignUpUser(data).then(() => navigation.navigate(RoutesKey.SIGNIN));
+      postAmbulanceData(data).then(() => navigation.pop());
     } else {
       alert('Password Wrong');
     }
@@ -63,7 +111,7 @@ export default function SignUp(props) {
                 Welcome to DAYD
               </Text>
               <Heading mt="30px" mb="20px" size="sm">
-                Sign up
+                Registration form for Ambulance
               </Heading>
 
               <Input
@@ -134,6 +182,109 @@ export default function SignUp(props) {
                   />
                 }
                 placeholder="Phone No" // mx={4}
+                _light={{
+                  placeholderTextColor: 'blueGray.400',
+                }}
+                _dark={{
+                  placeholderTextColor: 'blueGray.50',
+                }}
+              />
+              <Input
+                onChangeText={val => setCnicNumber(val)}
+                borderRadius="30"
+                mt="16px"
+                keyboardType="numeric"
+                InputLeftElement={
+                  <Icon
+                    as={<FontAwesome5 name="user" />}
+                    size="4"
+                    m={4}
+                    _light={{
+                      color: 'black',
+                    }}
+                    _dark={{
+                      color: 'gray.300',
+                    }}
+                  />
+                }
+                placeholder="Cnic number" // mx={4}
+                _light={{
+                  placeholderTextColor: 'blueGray.400',
+                }}
+                _dark={{
+                  placeholderTextColor: 'blueGray.50',
+                }}
+              />
+              <Input
+                onChangeText={val => setLicenseNumber(val)}
+                borderRadius="30"
+                mt="16px"
+                keyboardType="numeric"
+                InputLeftElement={
+                  <Icon
+                    as={<FontAwesome5 name="user" />}
+                    size="4"
+                    m={4}
+                    _light={{
+                      color: 'black',
+                    }}
+                    _dark={{
+                      color: 'gray.300',
+                    }}
+                  />
+                }
+                placeholder="License number" // mx={4}
+                _light={{
+                  placeholderTextColor: 'blueGray.400',
+                }}
+                _dark={{
+                  placeholderTextColor: 'blueGray.50',
+                }}
+              />
+              <Input
+                onChangeText={val => setVehicleNumber(val)}
+                borderRadius="30"
+                mt="16px"
+                keyboardType="numeric"
+                InputLeftElement={
+                  <Icon
+                    as={<FontAwesome5 name="user" />}
+                    size="4"
+                    m={4}
+                    _light={{
+                      color: 'black',
+                    }}
+                    _dark={{
+                      color: 'gray.300',
+                    }}
+                  />
+                }
+                placeholder="Vehicle number" // mx={4}
+                _light={{
+                  placeholderTextColor: 'blueGray.400',
+                }}
+                _dark={{
+                  placeholderTextColor: 'blueGray.50',
+                }}
+              />
+               <Input
+                onChangeText={val => setAddress(val)}
+                mt="16px"
+                borderRadius="30"
+                InputLeftElement={
+                  <Icon
+                    as={<FontAwesome5 name="user" />}
+                    size="4"
+                    m={4}
+                    _light={{
+                      color: 'black',
+                    }}
+                    _dark={{
+                      color: 'gray.300',
+                    }}
+                  />
+                }
+                placeholder="Address" // mx={4}
                 _light={{
                   placeholderTextColor: 'blueGray.400',
                 }}
@@ -228,37 +379,15 @@ export default function SignUp(props) {
               />
               <Box width="100%" mt="10">
                 <VStack space={3}>
+                  <Button
+                    borderRadius="30"
+                    h="48px"
+                    onPress={() => uploadImgOne()}>
+                    Pick License
+                  </Button>
                   <Button borderRadius="30" h="48px" onPress={() => Login()}>
                     Sign Up!
                   </Button>
-                  <HStack mt="6" justifyContent="center">
-                    <Text fontSize="sm" color="coolGray.600">
-                      All ready have Account{' '}
-                    </Text>
-                    <Link onPress={() => navigation.pop()}>Sign in</Link>
-                  </HStack>
-                  <HStack mt="6" justifyContent="center">
-                    <Text fontSize="sm" color="coolGray.600">
-                      For Doctor{' '}
-                    </Text>
-                    <Link
-                      onPress={() =>
-                        navigation.navigate(RoutesKey.DOCTORREGISTAR)
-                      }>
-                      Registration
-                    </Link>
-                  </HStack>
-                  <HStack mt="6" justifyContent="center">
-                    <Text fontSize="sm" color="coolGray.600">
-                      For Ambulance{' '}
-                    </Text>
-                    <Link
-                      onPress={() =>
-                        navigation.navigate(RoutesKey.AMBULANCEREGISTAR)
-                      }>
-                      Registration
-                    </Link>
-                  </HStack>
                 </VStack>
               </Box>
             </Center>
@@ -267,4 +396,6 @@ export default function SignUp(props) {
       </Center>
     </ScrollView>
   );
-}
+};
+
+export default AmbulanceRegistor;

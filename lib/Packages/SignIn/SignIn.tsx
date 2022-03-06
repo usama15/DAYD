@@ -42,7 +42,6 @@ export default function SignIn() {
     });
   };
 
-  console.log(uData);
   return (
     <ScrollView bg="#f6f6f1">
       <Center mt="5" px="3">
@@ -125,10 +124,10 @@ export default function SignIn() {
             </VStack>
           <HStack mt="6" justifyContent="center">
             <Text fontSize="sm" color="coolGray.600">
-              For Doctor{' '}
+              For New User{' '}
             </Text>
-            <Link onPress={() => navigation.navigate(RoutesKey.DOCTORREGISTAR)}>
-              Registration
+            <Link onPress={() => navigation.navigate(RoutesKey.SIGNUP)}>
+              Signup here
             </Link>
           </HStack>
           </Box>
