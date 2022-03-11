@@ -14,11 +14,14 @@ import {
   Text,
   HStack,
   ScrollView,
+  Avatar,
+  Select,
+  CheckIcon,
 } from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import { postDoctorData } from './duck/operations';
+import {postDoctorData} from './duck/operations';
 const DoctorRegistar = () => {
   const [show, setShow] = React.useState(false);
   const [show1, setShow1] = React.useState(false);
@@ -30,6 +33,8 @@ const DoctorRegistar = () => {
   const [pincode, setPincode] = useState('');
   const [conformPincode, setConformPincode] = useState('');
   const [Img, setImg] = useState('');
+  const [Img1, setImg1] = useState('');
+  let [service, setService] = React.useState('');
   const uploadImgOne = () => {
     const options = {
       quality: 1,
@@ -71,6 +76,47 @@ const DoctorRegistar = () => {
         alert(err);
       });
   };
+  const uploadImgTwo = () => {
+    const options = {
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const uri = response.assets[0].uri;
+        const type = response.assets[0].type;
+        const name = response.assets[0].fileName;
+        const source = {
+          uri,
+          type,
+          name,
+        };
+        cloudinaryUploadTwo(source);
+      }
+    });
+  };
+
+  const cloudinaryUploadTwo = image => {
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'hl08r4ih');
+    data.append('cloud_name', 'da6xurnwg');
+    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
+      method: 'post',
+      body: data,
+    })
+      .then(res => res.json())
+      .then(data => {
+        setImg1(data.url);
+      })
+      .then(async () => await alert('Submit'))
+      .catch(err => {
+        alert(err);
+      });
+  };
 
   const Login = () => {
     let data = {
@@ -81,11 +127,12 @@ const DoctorRegistar = () => {
       userType: 'doctor',
       cnicNumber: cnicNumber,
       drCert: Img,
+      userImage: Img1,
+      drType:service
     };
-    console.log(data)
+    console.log(data);
     if (pincode == conformPincode) {
-      postDoctorData(data)
-      .then(() => navigation.pop());
+      postDoctorData(data).then(() => navigation.pop());
     } else {
       alert('Password Wrong');
     }
@@ -102,13 +149,24 @@ const DoctorRegistar = () => {
                 fontSize="24"
                 fontFamily="Merriweather"
                 textAlign="center"
-                mt="30px">
+                mt="0px">
                 Welcome to DAYD
               </Text>
-              <Heading mt="30px" mb="20px" size="sm">
+              <Heading mt="10px" mb="20px" size="sm">
                 Registration form for Doctor
               </Heading>
 
+              <Box mb="10">
+                <Avatar size="xl" source={{uri: Img1}} />
+                <TouchableOpacity onPress={() => uploadImgTwo()}>
+                  <Icon
+                    ml="auto"
+                    mt="-2"
+                    size="4"
+                    as={<FontAwesome5 name="edit" />}
+                  />
+                </TouchableOpacity>
+              </Box>
               <Input
                 onChangeText={val => setUserName(val)}
                 borderRadius="30"
@@ -295,6 +353,37 @@ const DoctorRegistar = () => {
                   placeholderTextColor: 'blueGray.50',
                 }}
               />
+              <Box mt="5">
+                <Select
+                  shadow={2}
+                  selectedValue={service}
+                  minWidth="200"
+                  accessibilityLabel="Choose Service"
+                  placeholder="Choose Doctor Category"
+                  _selectedItem={{
+                    bg: 'teal.600',
+                    endIcon: <CheckIcon size="5" />,
+                  }}
+                  _light={{
+                    bg: 'coolGray.100',
+                  }}
+                  _dark={{
+                    bg: 'coolGray.800',
+                  }}
+                  onValueChange={itemValue => setService(itemValue)}>
+                  <Select.Item
+                    mb="2"
+                    label="General Physicians"
+                    value="General Physicians"
+                  />
+                  <Select.Item mb="2" label="Specialist" value="Specialist" />
+                  <Select.Item
+                    mb="2"
+                    label="Dermatologist"
+                    value="Dermatologist"
+                  />
+                </Select>
+              </Box>
               <Box width="100%" mt="10">
                 <VStack space={3}>
                   <Button

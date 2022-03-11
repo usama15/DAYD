@@ -1,36 +1,21 @@
 import {Box, Text, Center, ScrollView, Image, Button} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import Axios from 'axios';
 import styles from './main.style';
-import {getVendorData, RegisterDoctor, deleteVendor} from './duck/operations';
+import {deleteUser, GetUserData} from './duck/operations';
 import GridImageView from 'react-native-grid-image-viewer';
-const RequestFromDoctor = () => {
+const DoctorInfo = () => {
   const [udata, setUdata] = useState([]);
   useEffect(() => {
-    getVendorData().then(res => {
+    GetUserData().then(res => {
       setUdata(res.filter(x => x.userType == 'doctor'));
     });
   }, [udata]);
 
   const Delete = async id => {
-    await deleteVendor(id);
+    await deleteUser(id);
   };
-  const Accpet = async udata => {
-    let data = {
-      username: udata?.username,
-      email: udata?.email,
-      phoneNo: udata?.phoneNo,
-      password: udata?.password,
-      userType: udata?.userType,
-      cnicNumber: udata?.cnicNumber, 
-      drCert: udata?.drCert, 
-      userImage: udata?.userImage, 
-      drType: udata?.drType,
-    };
-    await RegisterDoctor(data)
-      .then(res => console.log(res))
-      .then(() => deleteVendor(udata?._id));
-  };
+
+  console.log(udata?.[0]);
   return (
     <ScrollView>
       <Center mt="5" px="3">
@@ -55,9 +40,6 @@ const RequestFromDoctor = () => {
                   Doctor Category: <Text fontWeight="400">{data?.drType}</Text>
                 </Text>
                 <Box mt="4" flexDirection="row" alignSelf="center">
-                  <Button w="40" mr="2" onPress={() => Accpet(data)}>
-                    Accpet
-                  </Button>
                   <Button w="40" onPress={() => Delete(data?._id)}>
                     Delete
                   </Button>
@@ -71,4 +53,4 @@ const RequestFromDoctor = () => {
   );
 };
 
-export default RequestFromDoctor;
+export default DoctorInfo;

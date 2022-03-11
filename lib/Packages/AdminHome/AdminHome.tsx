@@ -19,25 +19,25 @@ const AdminHome = () => {
                                 <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />
                             </Box>
                         </TouchableOpacity >
-                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.AMBULANCEREGISTAR)}>
+                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.REQUESTFROMAMBULANCE)}>
                             <Box style={styles.mainBox}>
                                 <Text style={styles.text}>Request from Ambulance</Text>
                                 <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />
                             </Box>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.AMBULANCEREGISTAR)}>
+                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.DOCTORINFO)}>
                             <Box style={styles.mainBox}>
                                 <Text style={styles.text}>Doctor Info</Text>
                                 <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />
                             </Box>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.AMBULANCEREGISTAR)}>
+                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.AMBULANCEINFO)}>
                             <Box style={styles.mainBox}>
                                 <Text style={styles.text}>Ambulance Info</Text>
                                 <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />
                             </Box>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.AMBULANCEREGISTAR)}>
+                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.USERINFO)}>
                             <Box style={styles.mainBox}>
                                 <Text style={styles.text}>User Info</Text>
                                 <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />

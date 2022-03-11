@@ -12,7 +12,7 @@ import {
   Icon,
   Link,
   Text,
-  HStack,
+  Avatar,
   ScrollView,
 } from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -74,6 +74,47 @@ const AmbulanceRegistor = () => {
         alert(err);
       });
   };
+  const uploadImgTwo = () => {
+    const options = {
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const uri = response.assets[0].uri;
+        const type = response.assets[0].type;
+        const name = response.assets[0].fileName;
+        const source = {
+          uri,
+          type,
+          name,
+        };
+        cloudinaryUploadTwo(source);
+      }
+    });
+  };
+
+  const cloudinaryUploadTwo = image => {
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'hl08r4ih');
+    data.append('cloud_name', 'da6xurnwg');
+    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
+      method: 'post',
+      body: data,
+    })
+      .then(res => res.json())
+      .then(data => {
+        setLicenseNumber(data.url);
+      })
+      .then(async () => await alert('Submit'))
+      .catch(err => {
+        alert(err);
+      });
+  };
 
   const Login = () => {
     let data = {
@@ -86,7 +127,7 @@ const AmbulanceRegistor = () => {
       vehicleNumber: vehicleNumber,
       LicenseNumber: licenseNumber,
       Address: Address,
-      drCert: Img,
+      userImage: Img,
     };
     console.log(data);
     if (pincode == conformPincode) {
@@ -100,20 +141,25 @@ const AmbulanceRegistor = () => {
     <ScrollView>
       <Center flex={1} px="3">
         <Box w="100%" p="10px">
-          <Box mt="1/3" height="100%">
+          <Box  height="100%">
             <Center>
               {/* <Image source={QuenoTextIcon} alt="Alternate Text" /> */}
               <Text
                 fontSize="24"
                 fontFamily="Merriweather"
                 textAlign="center"
-                mt="30px">
+                mt="10px">
                 Welcome to DAYD
               </Text>
-              <Heading mt="30px" mb="20px" size="sm">
+              <Heading mt="20px" mb="20px" size="sm">
                 Registration form for Ambulance
               </Heading>
-
+              <Box mb='10'>
+                <Avatar size="xl" source={{uri : Img}}/>
+                <TouchableOpacity onPress={() => uploadImgOne()}>
+                <Icon ml='auto' mt='-2' size='4' as={<FontAwesome5 name="edit" />}/>
+                </TouchableOpacity>
+              </Box>
               <Input
                 onChangeText={val => setUserName(val)}
                 borderRadius="30"
@@ -215,7 +261,7 @@ const AmbulanceRegistor = () => {
                   placeholderTextColor: 'blueGray.50',
                 }}
               />
-              <Input
+              {/* <Input
                 onChangeText={val => setLicenseNumber(val)}
                 borderRadius="30"
                 mt="16px"
@@ -240,7 +286,7 @@ const AmbulanceRegistor = () => {
                 _dark={{
                   placeholderTextColor: 'blueGray.50',
                 }}
-              />
+              /> */}
               <Input
                 onChangeText={val => setVehicleNumber(val)}
                 borderRadius="30"
@@ -267,7 +313,7 @@ const AmbulanceRegistor = () => {
                   placeholderTextColor: 'blueGray.50',
                 }}
               />
-               <Input
+              <Input
                 onChangeText={val => setAddress(val)}
                 mt="16px"
                 borderRadius="30"
@@ -382,7 +428,7 @@ const AmbulanceRegistor = () => {
                   <Button
                     borderRadius="30"
                     h="48px"
-                    onPress={() => uploadImgOne()}>
+                    onPress={() => uploadImgTwo()}>
                     Pick License
                   </Button>
                   <Button borderRadius="30" h="48px" onPress={() => Login()}>

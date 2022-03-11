@@ -17,67 +17,52 @@ import styles from './Profile.style';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-//   import RoutesKey from "../../navigation/routesKey";
-//   import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/core';
-import {removeStorage} from '../../utils/localStore';
+import {removeStorage, getDataFromPhone} from '../../utils/localStore';
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
-//   import { getDataFromPhone, removeStorage } from "../localStorage.js";
-//   import Axios from "axios"
-// import PushNotification from "react-native-push-notification";
-
 export default function profile() {
-  const [udata, setUdata] = useState([]);
   const [data, setData] = useState('');
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNo, setPhoneNo] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [conformPincode, setConformPincode] = useState('');
   useEffect(() => {
-    //   getDataFromPhone('userEmail').then((res) => setData(JSON.parse(res)))
+    getDataFromPhone('User').then(res => setData(JSON.parse(res)));
   }, []);
-  const [showModal, setShowModal] = useState(false);
   const navigation = useNavigation();
 
   const logout = async () => {
     removeStorage('UserType'),
-    removeStorage('Token'),
-    removeStorage('User'),
-    navigation.navigate(RoutesKey.WELCOME)
-    //   try {
-    //     await auth().signOut().then(navigation.navigate('signin'))
-    //   } catch (error) {
-    //     alert(error);
-    //   }
+      removeStorage('Token'),
+      removeStorage('User'),
+      navigation.navigate(RoutesKey.WELCOME);
   };
-
-  const PushTest = () => {
-    // PushNotification.localNotification({
-    //   channelId: 'test-channel',
-    //   title: 'Test',
-    //   message:'ok'
-    // })
-  };
+  console.log(data);
   return (
     <ScrollView>
       <Center mt="5" px="3">
         <Box w="100%" p="10px">
-          <VStack mt="20%">
-            {/* <Box mt='5'>
-                <Avatar
-                  size="xl"
-                  alignSelf="center"
-                // source={require("../../assets/shapes/kidprofile.png")}
-                />
-              </Box> */}
-            {/* {data != null ? */}
-
+          <VStack>
+            <Box mb="10" alignSelf="center">
+              <Avatar size="xl" source={{uri: data?.userImage}} />
+            </Box>
+            <Box>
+              <Image
+                w="100%"
+                h="130"
+                resizeMode="center"
+                source={{
+                  uri:
+                    data?.userType == 'ambulance'
+                      ? data?.LicenseNumber
+                      : data?.userType == 'doctor'
+                      ? data?.drCert
+                      : null,
+                }}
+                alt="img"
+              />
+            </Box>
             <Box style={styles.box2}>
               <Input
                 mb="5"
-                // defaultValue={data.username}
-                // value={userName}
+                isDisabled={true}
+                defaultValue={data?.username}
                 InputLeftElement={
                   <>
                     <Icon
@@ -117,7 +102,8 @@ export default function profile() {
               />
               <Input
                 mb="5"
-                // defaultValue={data.phoneNo}
+                isDisabled={true}
+                defaultValue={data?.phoneNo}
                 // value={phoneNo}
                 InputLeftElement={
                   <>
@@ -158,7 +144,8 @@ export default function profile() {
               />
               <Input
                 mb="5"
-                // defaultValue={data.email}
+                defaultValue={data?.email}
+                isDisabled={true}
                 InputLeftElement={
                   <>
                     <Icon
@@ -196,17 +183,32 @@ export default function profile() {
                   placeholderTextColor: 'blueGray.50',
                 }}
               />
-              <Input
-                mb="5"
-                // defaultValue={data.password}
-                // value={pincode}
-                type="password"
-                InputLeftElement={
-                  <>
+              {data?.userType == 'ambulance' ? (
+                <Input
+                  mb="5"
+                  isDisabled={true}
+                  defaultValue={data.Address}
+                  InputLeftElement={
+                    <>
+                      <Icon
+                        as={<Ionicons name="home" />}
+                        size="4"
+                        m={4}
+                        _light={{
+                          color: 'black',
+                        }}
+                        _dark={{
+                          color: 'gray.300',
+                        }}
+                      />
+                    </>
+                  }
+                  InputRightElement={
                     <Icon
-                      as={<Ionicons name="lock-closed-outline" />}
+                      as={<Feather name="edit-3" />}
                       size="4"
                       m={4}
+                      mr="5"
                       _light={{
                         color: 'black',
                       }}
@@ -214,40 +216,42 @@ export default function profile() {
                         color: 'gray.300',
                       }}
                     />
-                  </>
-                }
-                InputRightElement={
-                  <Icon
-                    as={<Feather name="edit-3" />}
-                    size="4"
-                    m={4}
-                    mr="5"
-                    _light={{
-                      color: 'black',
-                    }}
-                    _dark={{
-                      color: 'gray.300',
-                    }}
-                  />
-                }
-                placeholder="Login" // mx={4}
-                _light={{
-                  placeholderTextColor: 'blueGray.400',
-                }}
-                _dark={{
-                  placeholderTextColor: 'blueGray.50',
-                }}
-              />
-              <Input
-                mb="5"
-                // value={conformPincode}
-                type="password"
-                InputLeftElement={
-                  <>
+                  }
+                  placeholder="Login" // mx={4}
+                  _light={{
+                    placeholderTextColor: 'blueGray.400',
+                  }}
+                  _dark={{
+                    placeholderTextColor: 'blueGray.50',
+                  }}
+                />
+              ) : null}
+              {data?.userType == 'ambulance' ? (
+                <Input
+                  mb="5"
+                  isDisabled={true}
+                  defaultValue={data.vehicleNumber}
+                  InputLeftElement={
+                    <>
+                      <Icon
+                        as={<Ionicons name="car" />}
+                        size="4"
+                        m={4}
+                        _light={{
+                          color: 'black',
+                        }}
+                        _dark={{
+                          color: 'gray.300',
+                        }}
+                      />
+                    </>
+                  }
+                  InputRightElement={
                     <Icon
-                      as={<Ionicons name="lock-closed-outline" />}
+                      as={<Feather name="edit-3" />}
                       size="4"
                       m={4}
+                      mr="5"
                       _light={{
                         color: 'black',
                       }}
@@ -255,65 +259,110 @@ export default function profile() {
                         color: 'gray.300',
                       }}
                     />
-                  </>
-                }
-                InputRightElement={
-                  <Icon
-                    as={<Feather name="edit-3" />}
-                    size="4"
-                    m={4}
-                    mr="5"
-                    _light={{
-                      color: 'black',
-                    }}
-                    _dark={{
-                      color: 'gray.300',
-                    }}
-                  />
-                }
-                placeholder="Login" // mx={4}
-                _light={{
-                  placeholderTextColor: 'blueGray.400',
-                }}
-                _dark={{
-                  placeholderTextColor: 'blueGray.50',
-                }}
-              />
+                  }
+                  placeholder="Login" // mx={4}
+                  _light={{
+                    placeholderTextColor: 'blueGray.400',
+                  }}
+                  _dark={{
+                    placeholderTextColor: 'blueGray.50',
+                  }}
+                />
+              ) : null}
+              {data?.userType == 'doctor' ? (
+                <Input
+                  mb="5"
+                  isDisabled={true}
+                  defaultValue={data?.drType}
+                  InputLeftElement={
+                    <>
+                      <Icon
+                        as={<FontAwesome5 name="user" />}
+                        size="4"
+                        m={4}
+                        _light={{
+                          color: 'black',
+                        }}
+                        _dark={{
+                          color: 'gray.300',
+                        }}
+                      />
+                    </>
+                  }
+                  InputRightElement={
+                    <Icon
+                      as={<Feather name="edit-3" />}
+                      size="4"
+                      m={4}
+                      mr="5"
+                      _light={{
+                        color: 'black',
+                      }}
+                      _dark={{
+                        color: 'gray.300',
+                      }}
+                    />
+                  }
+                  placeholder="Login" // mx={4}
+                  _light={{
+                    placeholderTextColor: 'blueGray.400',
+                  }}
+                  _dark={{
+                    placeholderTextColor: 'blueGray.50',
+                  }}
+                />
+              ) : null}
+              {data?.userType == 'ambulance' || data?.userType == 'doctor' ? (
+                <Input
+                  mb="5"
+                  isDisabled={true}
+                  defaultValue={data.cnicNumber}
+                  InputLeftElement={
+                    <>
+                      <Icon
+                        as={<Ionicons name="card" />}
+                        size="4"
+                        m={4}
+                        _light={{
+                          color: 'black',
+                        }}
+                        _dark={{
+                          color: 'gray.300',
+                        }}
+                      />
+                    </>
+                  }
+                  InputRightElement={
+                    <Icon
+                      as={<Feather name="edit-3" />}
+                      size="4"
+                      m={4}
+                      mr="5"
+                      _light={{
+                        color: 'black',
+                      }}
+                      _dark={{
+                        color: 'gray.300',
+                      }}
+                    />
+                  }
+                  placeholder="Login" // mx={4}
+                  _light={{
+                    placeholderTextColor: 'blueGray.400',
+                  }}
+                  _dark={{
+                    placeholderTextColor: 'blueGray.50',
+                  }}
+                />
+              ) : null}
             </Box>
-            {/* : <Text>Please Login Again </Text>} */}
             <Button
               style={styles.btn}
               borderRadius="30"
               w="50%"
-              onPress={() => logout()}
-              //   onPress={() =>
-              //     logout().then
-              //       (setShowModal(false)).then(
-              //         removeStorage('userData'),
-              //         removeStorage('userEmail')
-              //       )}
-            >
+              onPress={() => logout()}>
               Signout
             </Button>
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-              <Modal.Content borderRadius="30" w="343px" h="505px">
-                <Modal.CloseButton />
-                <Modal.Body>
-                  <Center>
-                    <Image
-                      // source={require("../../assets/images/scooty.png")}
-                      alt="logoutimage"
-                    />
-                    <Text fontSize="18px">Changes saved</Text>
-                    <Box flexDirection="row" mt="10">
-                      <Button w="120px" h="40px" onPress={() => PushTest()}>
-                        OK
-                      </Button>
-                    </Box>
-                  </Center>
-                </Modal.Body>
-              </Modal.Content>
-            </Modal>
           </VStack>
         </Box>
       </Center>

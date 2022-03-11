@@ -14,6 +14,7 @@ import Dashboard from '../../../Packages/DashBoard/Dashboard';
 import {getDataFromPhone} from '../../../utils/localStore';
 import AdminBottomNav from './AdminBottomNav';
 import DoctorBottomNav from './DoctorBottomNav';
+import AmbBottomNav from './AmbBottomNav';
 
 const userNav = () => {
   const Tab = createBottomTabNavigator();
@@ -78,6 +79,8 @@ const BottomNav = () => {
     ? AdminBottomNav()
     : data == 'doctor'
     ? DoctorBottomNav()
+    : data == 'ambulance'
+    ? AmbBottomNav()
     : userNav();
 };
 export default BottomNav;
