@@ -14,64 +14,37 @@ import {
   CheckIcon,
   Select,
   Modal,
-  FlatList
-
-} from "native-base";
-import React, { useState, useEffect } from "react";
-import Axios from "axios"
-import { ImageBackground, ActivityIndicator } from "react-native";
-import styles from "./Dashboard.style";
-import { useNavigation } from "@react-navigation/native";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { TouchableOpacity } from 'react-native'
-import moment from "moment"
-let lng = ''
+  FlatList,
+} from 'native-base';
+import React, {useState, useEffect} from 'react';
+import Axios from 'axios';
+import {ImageBackground, ActivityIndicator} from 'react-native';
+import styles from './Dashboard.style';
+import {useNavigation} from '@react-navigation/native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {TouchableOpacity} from 'react-native';
+import moment from 'moment';
+import {GetUserData} from './duck/operations';
+let lng = '';
 const Dashboard = () => {
-  const navigation = useNavigation()
-  const [udata, setUdata] = useState([])
-  const [udata1, setUdata1] = useState([])
-  const [udata2, setUdata2] = useState([])
-  const [udata3, setUdata3] = useState([])
-  const [showModal2, setShowModal2] = useState(false)
-  const [price, setPrice] = useState(0)
-  const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
+  const navigation = useNavigation();
+  const [udata, setUdata] = useState([]);
+  const [udata1, setUdata1] = useState([]);
+  const [udata2, setUdata2] = useState([]);
+  const [udata3, setUdata3] = useState([]);
 
   useEffect(() => {
-    Axios.get("https://smartfarm012.herokuapp.com/getPackage").then(
-      (reponse) => {
-        const newdata = reponse.data
-        setMasterDataSource(newdata)
-        setUdata(newdata.filter((x) => x.Category == 'Diamond'))
-      })
-  }, [])
-  useEffect(() => {
-    Axios.get("https://smartfarm012.herokuapp.com/getPackage").then(
-      (reponse) => {
-        const newdata = reponse.data
-        lng = newdata.length
-        setUdata1(newdata.filter((x) => x.Category == 'Golden'))
-      })
-  }, [])
-  useEffect(() => {
-    Axios.get("https://smartfarm012.herokuapp.com/getPackage").then(
-      (reponse) => {
-        const newdata = reponse.data
-        setUdata2(newdata.filter((x) => x.Category == 'Silver'))
-      })
-  }, [])
+    GetUserData().then(reponse => {
+      const newdata2 = reponse.filter(x => x.userType == 'ambulance');
+      const newdata = reponse.filter(x => x.userType == 'doctor');
+      console.log(newdata);
+      setUdata(newdata.filter(x => x.drType == 'General Physicians'));
+      setUdata1(newdata.filter(x => x.drType == 'Specialist'));
+      setUdata2(newdata.filter(x => x.drType == 'Dermatologist'));
+      setUdata3(newdata2);
+    });
+  }, []);
 
-  const filter = () => {
- 
-    if (price !== '') {
-      const newData = masterDataSource.filter(x => moment(x.PriceFor12) <= moment(price))
-      navigation.navigate('Search', { data: newData })
-    } else {
-      alert('Please enter price')
-    }
-
-  }
-  
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = () => {
@@ -86,17 +59,13 @@ const Dashboard = () => {
     <ScrollView>
       <Center flex={1} px="3">
         <Box w="100%" p="2px">
-          {/* <TouchableOpacity style={{ marginTop: '2%' }} onPress={() => setShowModal2(true)}>
-            <Box borderRadius={20} bg='#25A9B6' h='10' p='3' flexDirection='row' ml='auto'>
-              <Text mt='-1' fontFamily='Ubuntu-Regular'>Enter Desired Budget</Text>
+          <Box mt="5">
+            <Box borderTopRightRadius="20" bg="#25A9B6" w="60%" mb="5">
+              <Text fontSize="24" style={styles.Heading} ml="5%">
+                General Physicians
+              </Text>
             </Box>
-          </TouchableOpacity> */}
-          <Box mt="5" >
-            <Box borderTopRightRadius='20' bg='#25A9B6' w='50%' mb='5'>
-
-              <Text fontSize='24' style={styles.Heading} ml='20%' >Diamond</Text>
-            </Box>
-            {udata != '' ?
+            {udata != '' ? (
               <FlatList
                 horizontal={true}
                 flexDirection="row"
@@ -104,34 +73,49 @@ const Dashboard = () => {
                 onRefresh={onRefresh}
                 refreshing={isFetching}
                 extraData={udata}
-                renderItem={({ item }) => (
-                  <Box borderRadius='20' p='2' borderWidth='1' borderColor='black.100' mr="7">
+                renderItem={({item}) => (
+                  <Box
+                    borderRadius="20"
+                    p="2"
+                    borderWidth="1"
+                    borderColor="black.100"
+                    mr="7">
                     <ImageBackground
                       resizeMode="cover"
                       borderRadius={20}
                       style={{
-                        opacity: 0.8
+                        opacity: 0.8,
                       }}
-                      source={{ uri: item.Image1 }}
-                    >
+                      source={{uri: item.userType}}>
                       <Box style={styles.couseBox1} />
                     </ImageBackground>
                     <Text style={styles.courseHeading} fontSize="24">
-                      {item.Title}
+                      {item.username}
                     </Text>
-                    <Box mt='1' w='100' ml='auto' mr='2' mb='2'>
-                      <Button rounded='20' onPress={() => navigation.navigate('ProductPage', { data: item })}>Booking</Button>
+                    <Box mt="1" w="100" ml="auto" mr="2" mb="2">
+                      <Button
+                        rounded="20"
+                        // onPress={() =>
+                        //   navigation.navigate('ProductPage', {data: item})
+                        // }
+                        >
+                        Booking
+                      </Button>
                     </Box>
                   </Box>
                 )}
               />
-              : <ActivityIndicator color='#25A9B6' size='large' />}
+            ) : (
+              <ActivityIndicator color="#25A9B6" size="large" />
+            )}
           </Box>
-          <Box mt="10" >
-            <Box borderTopRightRadius='20' bg='#25A9B6' w='50%' mb='5'>
-              <Text fontSize='24' style={styles.Heading} ml='20%'>Golden</Text>
+          <Box mt="10">
+            <Box borderTopRightRadius="20" bg="#25A9B6" w="50%" mb="5">
+              <Text fontSize="24" style={styles.Heading} ml="10%">
+                Specialist
+              </Text>
             </Box>
-            {udata1 != '' ?
+            {udata1 != '' ? (
               <FlatList
                 horizontal={true}
                 flexDirection="row"
@@ -139,34 +123,49 @@ const Dashboard = () => {
                 onRefresh={onRefresh}
                 refreshing={isFetching}
                 extraData={udata1}
-                renderItem={({ item }) => (
-                  <Box borderRadius='20' p='2' borderWidth='1' borderColor='black.100' mr="7">
+                renderItem={({item}) => (
+                  <Box
+                    borderRadius="20"
+                    p="2"
+                    borderWidth="1"
+                    borderColor="black.100"
+                    mr="7">
                     <ImageBackground
                       resizeMode="cover"
                       borderRadius={20}
                       style={{
-                        opacity: 0.8
+                        opacity: 0.8,
                       }}
-                      source={{ uri: item.Image1 }}
-                    >
+                      source={{uri: item.userImage}}>
                       <Box style={styles.couseBox1} />
                     </ImageBackground>
                     <Text style={styles.courseHeading} fontSize="24">
-                      {item.Title}
+                      {item.username}
                     </Text>
-                    <Box mt='4' w='100' ml='auto' mr='2' mb='2'>
-                      <Button rounded='20' onPress={() => navigation.navigate('ProductPage', { data: item })}>Booking</Button>
+                    <Box mt="4" w="100" ml="auto" mr="2" mb="2">
+                      <Button
+                        rounded="20"
+                        // onPress={() =>
+                        //   navigation.navigate('ProductPage', {data: item})
+                        // }
+                        >
+                        Booking
+                      </Button>
                     </Box>
                   </Box>
                 )}
               />
-              : <ActivityIndicator color='#25A9B6' size='large' />}
+            ) : (
+              <ActivityIndicator color="#25A9B6" size="large" />
+            )}
           </Box>
-          <Box mt="10" >
-            <Box borderTopRightRadius='20' bg='#25A9B6' w='50%' mb='5'>
-              <Text fontSize='24' style={styles.Heading} ml='20%'>Silver</Text>
+          <Box mt="10">
+            <Box borderTopRightRadius="20" bg="#25A9B6" w="50%" mb="5">
+              <Text fontSize="24" style={styles.Heading} ml="10%">
+                Dermatologist
+              </Text>
             </Box>
-            {udata2 != '' ?
+            {udata2 != '' ? (
               <FlatList
                 horizontal={true}
                 flexDirection="row"
@@ -174,59 +173,96 @@ const Dashboard = () => {
                 onRefresh={onRefresh}
                 refreshing={isFetching}
                 extraData={udata2}
-                renderItem={({ item }) => (
-                  <Box borderRadius='20' p='2' borderWidth='1' borderColor='black.100' mr="7">
+                renderItem={({item}) => (
+                  <Box
+                    borderRadius="20"
+                    p="2"
+                    borderWidth="1"
+                    borderColor="black.100"
+                    mr="7">
                     <ImageBackground
                       resizeMode="cover"
                       borderRadius={20}
                       style={{
-                        opacity: 0.8
+                        opacity: 0.8,
                       }}
-                      source={{ uri: item.Image1 }}
-                    >
+                      source={{uri: item.userImage}}>
                       <Box style={styles.couseBox1} />
                     </ImageBackground>
                     <Text style={styles.courseHeading} fontSize="24">
-                      {item.Title}
+                      {item.username}
                     </Text>
-                    <Box mt='4' w='100' ml='auto' mr='2' mb='2'>
-                      <Button rounded='20' onPress={() => navigation.navigate('ProductPage', { data: item })}>Booking</Button>
+                    <Box mt="4" w="100" ml="auto" mr="2" mb="2">
+                      <Button
+                        rounded="20"
+                        // onPress={() =>
+                        //   navigation.navigate('ProductPage', {data: item})
+                        // }
+                        >
+                        Booking
+                      </Button>
                     </Box>
                   </Box>
                 )}
               />
-              : <ActivityIndicator color='#25A9B6' size='large' />}
+            ) : (
+              <ActivityIndicator color="#25A9B6" size="large" />
+            )}
           </Box>
-          <Modal isOpen={showModal2} onClose={() => setShowModal2(false)}>
-            <Modal.Content w="100%">
-              <Modal.Body p='8'>
-                <Box borderRadius='15' w='100%' alignSelf='center' p='0%'>
-                  <Input
-                    pl='5'
-                    onChangeText={(text) => setPrice(text)}
-                    borderRadius='30'
-                    keyboardType='numeric'
-                    value={price}
-                    placeholder="Enter Your Budget Price" // mx={4}
-                    _light={{
-                      placeholderTextColor: "blueGray.400",
-                    }}
-                    _dark={{
-                      placeholderTextColor: "blueGray.50",
-                    }}
-                  />
-                </Box>
-                <Box flexDirection='row'>
-                  <Button mt='5' w='50%' borderRadius='20' onPress={() => setShowModal2(false)} >Close</Button>
-                  <Button mt='5' w='50%' mr='2' borderRadius='20' onPress={() => filter()} >Ok</Button>
-                </Box>
-              </Modal.Body>
-            </Modal.Content>
-          </Modal>
+          <Box mt="10">
+            <Box borderTopRightRadius="20" bg="#25A9B6" w="50%" mb="5">
+              <Text fontSize="24" style={styles.Heading} ml="10%">
+                Ambulance
+              </Text>
+            </Box>
+            {udata3 != '' ? (
+              <FlatList
+                horizontal={true}
+                flexDirection="row"
+                data={udata3}
+                onRefresh={onRefresh}
+                refreshing={isFetching}
+                extraData={udata3}
+                renderItem={({item}) => (
+                  <Box
+                    borderRadius="20"
+                    p="2"
+                    borderWidth="1"
+                    borderColor="black.100"
+                    mr="7">
+                    <ImageBackground
+                      resizeMode="cover"
+                      borderRadius={20}
+                      style={{
+                        opacity: 0.8,
+                      }}
+                      source={{uri: item.userImage}}>
+                      <Box style={styles.couseBox1} />
+                    </ImageBackground>
+                    <Text style={styles.courseHeading} fontSize="24">
+                      {item.username}
+                    </Text>
+                    <Box mt="4" w="100" ml="auto" mr="2" mb="2">
+                      <Button
+                        rounded="20"
+                        // onPress={() =>
+                        //   navigation.navigate('ProductPage', {data: item})
+                        // }
+                        >
+                        Booking
+                      </Button>
+                    </Box>
+                  </Box>
+                )}
+              />
+            ) : (
+              <ActivityIndicator color="#25A9B6" size="large" />
+            )}
+          </Box>
         </Box>
       </Center>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
