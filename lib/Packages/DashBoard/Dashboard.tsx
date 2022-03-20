@@ -25,6 +25,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import {GetUserData} from './duck/operations';
+import RoutesKey from '../../Components/Navigation/Route/routesKey';
 let lng = '';
 const Dashboard = () => {
   const navigation = useNavigation();
@@ -95,10 +96,11 @@ const Dashboard = () => {
                     <Box mt="1" w="100" ml="auto" mr="2" mb="2">
                       <Button
                         rounded="20"
-                        // onPress={() =>
-                        //   navigation.navigate('ProductPage', {data: item})
-                        // }
-                        >
+                        onPress={() =>
+                          navigation.navigate(RoutesKey.DETAILINFO, {
+                            data: item,
+                          })
+                        }>
                         Booking
                       </Button>
                     </Box>
@@ -145,10 +147,11 @@ const Dashboard = () => {
                     <Box mt="4" w="100" ml="auto" mr="2" mb="2">
                       <Button
                         rounded="20"
-                        // onPress={() =>
-                        //   navigation.navigate('ProductPage', {data: item})
-                        // }
-                        >
+                        onPress={() =>
+                          navigation.navigate(RoutesKey.DETAILINFO, {
+                            data: item,
+                          })
+                        }>
                         Booking
                       </Button>
                     </Box>
@@ -195,10 +198,11 @@ const Dashboard = () => {
                     <Box mt="4" w="100" ml="auto" mr="2" mb="2">
                       <Button
                         rounded="20"
-                        // onPress={() =>
-                        //   navigation.navigate('ProductPage', {data: item})
-                        // }
-                        >
+                        onPress={() =>
+                          navigation.navigate(RoutesKey.DETAILINFO, {
+                            data: item,
+                          })
+                        }>
                         Booking
                       </Button>
                     </Box>
@@ -245,10 +249,11 @@ const Dashboard = () => {
                     <Box mt="4" w="100" ml="auto" mr="2" mb="2">
                       <Button
                         rounded="20"
-                        // onPress={() =>
-                        //   navigation.navigate('ProductPage', {data: item})
-                        // }
-                        >
+                        onPress={() =>
+                          navigation.navigate(RoutesKey.DETAILINFO, {
+                            data: item,
+                          })
+                        }>
                         Booking
                       </Button>
                     </Box>
