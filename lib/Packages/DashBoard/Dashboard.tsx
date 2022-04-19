@@ -15,6 +15,7 @@ import {
   Select,
   Modal,
   FlatList,
+  View,
 } from 'native-base';
 import React, {useState, useEffect} from 'react';
 import Axios from 'axios';
@@ -24,8 +25,10 @@ import {useNavigation} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {TouchableOpacity} from 'react-native';
 import moment from 'moment';
-import {GetUserData} from './duck/operations';
+import {GetSilderData, GetUserData} from './duck/operations';
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
+import Silder from '../../Components/Silder';
 let lng = '';
 const Dashboard = () => {
   const navigation = useNavigation();
@@ -60,6 +63,8 @@ const Dashboard = () => {
     <ScrollView>
       <Center flex={1} px="3">
         <Box w="100%" p="2px">
+        <Silder/>
+
           <Box mt="5">
             <Box borderTopRightRadius="20" bg="#25A9B6" w="60%" mb="5">
               <Text fontSize="24" style={styles.Heading} ml="5%">

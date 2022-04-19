@@ -6866,6 +6866,11 @@
     "css-select" "^2.1.0"
     "css-tree" "^1.0.0-alpha.39"
 
+"react-native-swiper-flatlist@^3.0.16":
+  "integrity" "sha512-8Mkh5DnGP7x42GBI870vpiliAdXAJObi8uDdqCjd3cWJBDgVv1xmo3y11CZzqpf6241EyddX0LygSt1Rv61LYg=="
+  "resolved" "https://registry.npmjs.org/react-native-swiper-flatlist/-/react-native-swiper-flatlist-3.0.16.tgz"
+  "version" "3.0.16"
+
 "react-native-vector-icons@^9.0.0":
   "integrity" "sha512-qKX5d5/TafHmI4B7UOSZCL3BAGh7ZfF30iLwRgxBkKfZl2lKSuHp8Ottj9OyWh9b5fFtlg+LtyvZrns3g2kh+w=="
   "resolved" "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-9.0.0.tgz"
@@ -6880,7 +6885,7 @@
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.67 || 1000.0.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@0.67.2":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.67 || 1000.0.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.59.0", "react-native@0.67.2":
   "integrity" "sha512-grEtpOLLvtSg8Bivg0ffVRCjTkresqMt7Jdog/geF6VAYhb4RnLaaUCWvyrfyB9buf135FKnqg5BIuve/XQNXA=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.67.2.tgz"
   "version" "0.67.2"
