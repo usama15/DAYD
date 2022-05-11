@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "852258016232",
+    "project_id": "dayd-ce3d2",
+    "storage_bucket": "dayd-ce3d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852258016232:android:04bcc3d9ec263cc882b25d",
+        "android_client_info": {
+          "package_name": "com.dayd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852258016232-r24b9u1607qg3bu34c9snr54pm3ue9vd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATAPtJLen-XT-kmUHnzYonnIjnXLHqkMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852258016232-r24b9u1607qg3bu34c9snr54pm3ue9vd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

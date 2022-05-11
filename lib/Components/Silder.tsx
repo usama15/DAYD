@@ -17,7 +17,7 @@ const Silder = () => {
         autoplay
         autoplayDelay={2}
         autoplayLoop
-        index={2}
+        index={0}
         // showPagination
       >
         {silderImage.map((item, index) => (
@@ -38,11 +38,12 @@ const Silder = () => {
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: 'white'},
-  child: {width: width, height: '100%', marginBottom: '60%'},
+  container: {flex: 1, backgroundColor: 'transparent'},
+  child: {width: width, height: '100%', marginBottom: '60%', borderRadius: 10},
   img: {
-    width: '100%',
+    width: '93%',
     height: '100%',
+    borderRadius: 20
     // borderRadius: 30,
   },
 });

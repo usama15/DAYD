@@ -17,6 +17,21 @@ const getVendorData = async () => {
     );
   });
 };
+const getImagesData = async () => {
+  return new Promise((resolve, reject) => {
+    apiService('get', '/getImages', null).then(
+      res => {
+        let responseData = res.data;
+        resolve(responseData);
+      },
+      err => {
+        let errorResponse = err.response.data;
+        reject(errorResponse);
+        alert(errorResponse.text);
+      },
+    );
+  });
+};
 const RegisterDoctor = async data => {
   return new Promise((resolve, reject) => {
     apiService('post', '/createUser', data).then(
@@ -35,6 +50,21 @@ const RegisterDoctor = async data => {
 const RegisterAmbulance = async data => {
   return new Promise((resolve, reject) => {
     apiService('post', '/createUser', data).then(
+      res => {
+        let responseData = res.data;
+        resolve(responseData);
+      },
+      err => {
+        let errorResponse = err.response.data;
+        reject(errorResponse);
+        alert(errorResponse.text);
+      },
+    );
+  });
+};
+const SilderImagePost = async data => {
+  return new Promise((resolve, reject) => {
+    apiService('post', '/createImage', data).then(
       res => {
         let responseData = res.data;
         resolve(responseData);
@@ -93,6 +123,21 @@ const deleteUser = async id => {
     );
   });
 };
+const deleteSilderImage = async id => {
+  return new Promise((resolve, reject) => {
+    apiService('delete', '/delImage/' + id, null).then(
+      res => {
+        let responseData = res.data;
+        resolve(responseData);
+      },
+      err => {
+        let errorResponse = err.response.data;
+        reject(errorResponse);
+        alert(errorResponse.text);
+      },
+    );
+  });
+};
 
 export {
   getVendorData,
@@ -100,5 +145,8 @@ export {
   deleteVendor,
   RegisterAmbulance,
   GetUserData,
-  deleteUser
+  deleteUser,
+  SilderImagePost,
+  deleteSilderImage,
+  getImagesData
 };

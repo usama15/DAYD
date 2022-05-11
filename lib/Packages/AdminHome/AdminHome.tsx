@@ -43,6 +43,12 @@ const AdminHome = () => {
                                 <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />
                             </Box>
                         </TouchableOpacity>
+                        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate(RoutesKey.SILDERIMAGES)}>
+                            <Box style={styles.mainBox}>
+                                <Text style={styles.text}>Silder Images</Text>
+                                <AntDesgin name='arrowright' style={styles.icon} size={23} color='black' />
+                            </Box>
+                        </TouchableOpacity>
                     </Box>
                 </Box>
             </Center>

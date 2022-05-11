@@ -54,6 +54,7 @@ export default function DetailInfo(props: any) {
                 {data.userType} Detail
               </Text>
             </Box>
+
             <Box mt="3">
               <Text fontSize="18" fontWeight="bold">
                 Name :<Text fontWeight="400">{data?.username}</Text>
@@ -83,15 +84,28 @@ export default function DetailInfo(props: any) {
                 </Text>
               ) : null}
             </Box>
-            <Button
-              mt="5"
-              rounded={20}
-              w="50%"
-              alignSelf="center"
-                onPress={() => navigation.navigate(RoutesKey.BOOKING, {info: data})}
-            >
-              Booking
-            </Button>
+            <Box flexDirection="row">
+              <Button
+                onPress={() =>
+                  navigation.navigate(RoutesKey.CHAT, {chat: data})
+                }
+                mt="5"
+                mr="1"
+                alignSelf="center"
+                w="50%">
+                Chat
+              </Button>
+              <Button
+                mt="5"
+                rounded={20}
+                w="50%"
+                alignSelf="center"
+                onPress={() =>
+                  navigation.navigate(RoutesKey.BOOKING, {info: data})
+                }>
+                Booking
+              </Button>
+            </Box>
           </Box>
         ) : null}
       </Center>
