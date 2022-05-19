@@ -17,6 +17,7 @@ import firestore from '@react-native-firebase/firestore';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {GetOrderData, OrderConform, deleteOrder} from './duck/operations';
+import moment from 'moment';
 
 let UserData: any = '';
 const DoctorRequest = () => {
@@ -104,7 +105,10 @@ const DoctorRequest = () => {
                     Address:
                     <Text fontWeight="400">{data?.Address}</Text>
                   </Text>
-
+                  <Text style={styles.text}>
+                    Date: 
+                    <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
+                  </Text>
                   <Box flexDirection="row" mt="3">
                     <Button w="50%" mr="1" onPress={() => Accpet(data)}>
                       Accpet

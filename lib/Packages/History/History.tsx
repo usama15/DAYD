@@ -17,6 +17,7 @@ import firestore from '@react-native-firebase/firestore';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {GetConformOrderData} from './duck/operations';
+import moment from 'moment';
 
 let UserData: any = '';
 const History = () => {
@@ -70,6 +71,10 @@ const History = () => {
                   <Text style={styles.text}>
                     Confirmation:
                     <Text fontWeight="400">{data?.confirmation}</Text>
+                  </Text>
+                  <Text style={styles.text}>
+                    Date: 
+                    <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
                   </Text>
                 </Box>
               </Box>

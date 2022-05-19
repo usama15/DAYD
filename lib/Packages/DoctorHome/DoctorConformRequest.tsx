@@ -10,18 +10,17 @@ import {
   Icon,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
-import Axios from 'axios';
 import styles from '../main.style';
 import {getDataFromPhone} from '../../utils/localStore';
-import firestore from '@react-native-firebase/firestore';
 import {ActivityIndicator} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {GetConformOrderData, OrderConform} from './duck/operations';
-
+import {GetConformOrderData} from './duck/operations';
+import {useNavigation} from '@react-navigation/native'
+import RoutesKey from '../../Components/Navigation/Route/routesKey';
+import moment from 'moment';
 let UserData: any = '';
 const DoctorConformRequest = () => {
   const [udata, setUdata] = useState([]);
-
+  const navigation = useNavigation()
   useEffect(() => {
     getDataFromPhone('User')
       .then(res => {
@@ -41,7 +40,9 @@ const DoctorConformRequest = () => {
     });
   };
 
-  const Accpet = async (item: any) => {};
+  const Accpet = async (item: any) => {
+    navigation.navigate(RoutesKey.SUBMITHISTORY, {userData: item})
+  };
 
   return (
     <ScrollView>
@@ -71,7 +72,10 @@ const DoctorConformRequest = () => {
                     Confirmation:
                     <Text fontWeight="400">{data?.confirmation}</Text>
                   </Text>
-
+                  <Text style={styles.text}>
+                    Date: 
+                    <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
+                  </Text>
                   <Box flexDirection="row" mt="3">
                     <Button
                       w="50%"

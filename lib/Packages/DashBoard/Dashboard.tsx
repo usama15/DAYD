@@ -62,7 +62,7 @@ const Dashboard = () => {
   return (
     <ScrollView>
       <Center flex={1} px="3">
-        <Box w="100%" p="2px">
+        <Box mt='5' w="100%" p="2px">
         <Silder/>
 
           <Box mt="5">

@@ -15,15 +15,19 @@ import {getDataFromPhone} from '../../../utils/localStore';
 import AdminBottomNav from './AdminBottomNav';
 import DoctorBottomNav from './DoctorBottomNav';
 import AmbBottomNav from './AmbBottomNav';
-
+import { Icon, IconButton } from 'native-base';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import RoutesKey from '../Route/routesKey';
 const userNav = () => {
   const Tab = createBottomTabNavigator();
+  const navigation = useNavigation()
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        tabBarActiveTintColor: '#25A9B6',
+    initialRouteName="Dashboard"
+    screenOptions={{
+      headerTitleAlign: 'center',
+      tabBarActiveTintColor: '#25A9B6',
       }}>
       <Tab.Screen
         name="History"
@@ -37,11 +41,19 @@ const userNav = () => {
         }}
       />
       <Tab.Screen
-        name="Home"
+        name="Dashboard"
         component={Dashboard}
         options={{
           tabBarShowLabel: false,
-          headerShown: false,
+          headerRight: () => (
+            <IconButton
+              icon={<Icon as={MaterialIcons} name="history-edu" />}
+              onPress={() =>
+                navigation.navigate(RoutesKey.PATIENTHISTORY)
+              }
+            />
+          ),
+          headerShown: true,
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
@@ -69,7 +81,6 @@ const userNav = () => {
 let udata = '';
 const BottomNav = () => {
   const [data, setData] = useState('');
-  const navigation = useNavigation();
   useEffect(() => {
     getDataFromPhone('UserType').then(res => setData(res));
   }, []);

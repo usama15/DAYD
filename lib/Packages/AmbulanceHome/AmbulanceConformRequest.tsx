@@ -17,6 +17,7 @@ import {
   import {ActivityIndicator} from 'react-native';
   import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
   import {GetConformOrderData, OrderConform} from './duck/operations';
+import moment from 'moment';
   
   let UserData: any = '';
   const AmbulanceConformRequest = () => {
@@ -71,6 +72,10 @@ import {
                       Confirmation:
                       <Text fontWeight="400">{data?.confirmation}</Text>
                     </Text>
+                    <Text style={styles.text}>
+                    Date: 
+                    <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
+                  </Text>
                   </Box>
                 </Box>
               ))
