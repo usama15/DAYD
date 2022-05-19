@@ -17,16 +17,6 @@ export default function AdminBottomNav() {
             }}
         >
             <Tab.Screen
-                name="AddVentor"
-                component={AddVentor}
-                options={{
-                    tabBarShowLabel: false,
-                    headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="shopping" color={color} size={size} />),
-                }}
-            />
-            <Tab.Screen
                 name="Home"
                 component={AdminHome}
                 options={{

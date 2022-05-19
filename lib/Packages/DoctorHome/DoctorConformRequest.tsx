@@ -73,7 +73,11 @@ const DoctorConformRequest = () => {
                   </Text>
 
                   <Box flexDirection="row" mt="3">
-                    <Button w="50%" mr="1" onPress={() => Accpet(data)}>
+                    <Button
+                      w="50%"
+                      isDisabled={data.History == true ? true : false}
+                      mr="1"
+                      onPress={() => Accpet(data)}>
                       Submit History
                     </Button>
                   </Box>
