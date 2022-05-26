@@ -61,21 +61,13 @@ export default function Chat(props: any) {
       .orderBy('createdAt', 'desc')
       .limit(50)
       .onSnapshot(snapshot => {
-        // const msgs:any = [];
-        // documentSnapshot?.forEach(async (documentSnapshot, index) => {
-        //   documentSnapshot.data().createdAt = await toDateTime(
-        //     documentSnapshot.data().createdAt.seconds,
-        //   );
-        //   msgs.push(documentSnapshot.data());s
-        // });
         const newPost = snapshot?.docs?.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setMessages(newPost.filter(x => x.user.ventorId == chat._id));
+        setMessages(newPost);
       });
   };
-  console.log(messages, 'mesages');
 
   const onSend = useCallback(async (messages = [], user) => {
     console.log(user, 'currentUser');
@@ -120,6 +112,19 @@ export default function Chat(props: any) {
         user={{
           _id: currentUser !== undefined ? currentUser?._id : '',
         }}
+        renderDay={(props) => (
+          <View >
+            <Text>
+            </Text>
+          </View>
+        )}
+        renderTime={(props) => (
+          <View >
+            <Text style={{marginHorizontal: 10, marginBottom: 5}}>
+              {`${props.currentMessage.createdAt.toDate().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`}
+            </Text>
+          </View>
+        )}
       />
     </View>
   );

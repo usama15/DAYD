@@ -8,6 +8,7 @@ import {
   Radio,
   Input,
   Icon,
+  View,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import styles from '../main.style';
@@ -17,6 +18,8 @@ import {GetConformOrderData} from './duck/operations';
 import {useNavigation} from '@react-navigation/native'
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
 import moment from 'moment';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+
 let UserData: any = '';
 const DoctorConformRequest = () => {
   const [udata, setUdata] = useState([]);
@@ -27,7 +30,7 @@ const DoctorConformRequest = () => {
         UserData = JSON.parse(res);
       })
       .then(async () => await Filter());
-  }, [udata]);
+  }, []);
 
   const Filter = async () => {
     GetConformOrderData().then((res: any) => {
@@ -65,10 +68,6 @@ const DoctorConformRequest = () => {
                     <Text fontWeight="400">{data?.phoneNo}</Text>
                   </Text>
                   <Text style={styles.text}>
-                    Address:
-                    <Text fontWeight="400">{data?.Address}</Text>
-                  </Text>
-                  <Text style={styles.text}>
                     Confirmation:
                     <Text fontWeight="400">{data?.confirmation}</Text>
                   </Text>
@@ -76,6 +75,26 @@ const DoctorConformRequest = () => {
                     Date: 
                     <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
                   </Text>
+                  <Box w="100%" h="80">
+                    <View style={styles.container}>
+                      <MapView
+                        provider={PROVIDER_GOOGLE}
+                        style={styles.map}
+                        region={{
+                          latitude: data?.Address?.coords?.latitude,
+                          longitude: data?.Address?.coords?.longitude,
+                          latitudeDelta: 0.1,
+                          longitudeDelta: 0.1,
+                        }}>
+                        <Marker
+                          coordinate={{
+                            latitude: data?.Address?.coords?.latitude,
+                            longitude: data?.Address?.coords?.longitude,
+                          }}
+                        />
+                      </MapView>
+                    </View>
+                  </Box>
                   <Box flexDirection="row" mt="3">
                     <Button
                       w="50%"

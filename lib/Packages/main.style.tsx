@@ -17,6 +17,16 @@ const styles = StyleSheet.create({
         fontWeight:'700',
         fontFamily:'Ubuntu-Regular'
     },
+
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        height: '100%',
+        width: '100%',
+        // justifyContent: 'flex-end',
+      },
+      map: {
+        ...StyleSheet.absoluteFillObject,
+      },
   
 })
 

@@ -8,6 +8,7 @@ import {
   Radio,
   Input,
   Icon,
+  View,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import Axios from 'axios';
@@ -18,20 +19,18 @@ import {ActivityIndicator} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {GetOrderData, OrderConform, deleteOrder} from './duck/operations';
 import moment from 'moment';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 let UserData: any = '';
 const DoctorRequest = () => {
   const [udata, setUdata] = useState([]);
-  const [value, setValue] = React.useState('');
-  const [price, setPrice] = React.useState('');
-
   useEffect(() => {
     getDataFromPhone('User')
       .then(res => {
         UserData = JSON.parse(res);
       })
       .then(async () => await Filter());
-  }, [udata]);
+  }, []);
 
   const Filter = async () => {
     GetOrderData().then((res: any) => {
@@ -102,13 +101,31 @@ const DoctorRequest = () => {
                     <Text fontWeight="400">{data?.phoneNo}</Text>
                   </Text>
                   <Text style={styles.text}>
-                    Address:
-                    <Text fontWeight="400">{data?.Address}</Text>
+                    Date:
+                    <Text fontWeight="400">
+                      {moment(data?.createdAt).format('MM/DD/YYYY')}
+                    </Text>
                   </Text>
-                  <Text style={styles.text}>
-                    Date: 
-                    <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
-                  </Text>
+                  <Box w="100%" h="80">
+                    <View style={styles.container}>
+                      <MapView
+                        provider={PROVIDER_GOOGLE}
+                        style={styles.map}
+                        region={{
+                          latitude: data?.Address?.coords?.latitude,
+                          longitude: data?.Address?.coords?.longitude,
+                          latitudeDelta: 0.1,
+                          longitudeDelta: 0.1,
+                        }}>
+                        <Marker
+                          coordinate={{
+                            latitude: data?.Address?.coords?.latitude,
+                            longitude: data?.Address?.coords?.longitude,
+                          }}
+                        />
+                      </MapView>
+                    </View>
+                  </Box>
                   <Box flexDirection="row" mt="3">
                     <Button w="50%" mr="1" onPress={() => Accpet(data)}>
                       Accpet

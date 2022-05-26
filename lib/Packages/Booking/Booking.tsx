@@ -22,6 +22,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {getDataFromPhone} from '../../utils/localStore';
 import {createOrderData} from './duck/operations';
+import Geolocation from '@react-native-community/geolocation';
 export default function Booking(props: any) {
   const {info} = props?.route?.params;
   const navigation = useNavigation();
@@ -30,10 +31,13 @@ export default function Booking(props: any) {
   const [quality, setQuality] = React.useState('');
 
   const [udata, setUData] = useState<any>('');
-  const [udata1, setUdata1] = useState([]);
+  const [location, setLocation] = useState([]);
 
   useEffect(() => {
     getDataFromPhone('User').then(res => setUData(JSON.parse(res)));
+    Geolocation.getCurrentPosition((position:any) => {
+      setLocation(position)
+    });
   }, []);
   console.log(udata);
   const Submit = async () => {
@@ -42,7 +46,7 @@ export default function Booking(props: any) {
       phoneNo: udata.phoneNo,
       email: udata.email,
       vendorEmail: info.email,
-      Address: quality,
+      Address: location,
     };
     createOrderData(data).then((res: any) => {
       if (res.success == true) {
@@ -84,7 +88,7 @@ export default function Booking(props: any) {
                   placeholderTextColor: 'blueGray.50',
                 }}
               />
-              <Input
+              {/* <Input
                 onChangeText={val => setQuality(val)}
                 value={quality}
                 borderRadius="30"
@@ -109,7 +113,7 @@ export default function Booking(props: any) {
                 _dark={{
                   placeholderTextColor: 'blueGray.50',
                 }}
-              />
+              /> */}
               <Box width="50%" mt="5">
                 <VStack space={3}>
                   <Button borderRadius="30" h="48px" onPress={() => Submit()}>

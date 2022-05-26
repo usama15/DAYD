@@ -92,7 +92,7 @@ const Dashboard = () => {
                       style={{
                         opacity: 0.8,
                       }}
-                      source={{uri: item.userType}}>
+                      source={{uri: item.userImage}}>
                       <Box style={styles.couseBox1} />
                     </ImageBackground>
                     <Text style={styles.courseHeading} fontSize="24">
