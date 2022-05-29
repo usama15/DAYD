@@ -65,16 +65,16 @@ const History = () => {
                     <Text fontWeight="400">{data?.phoneNo}</Text>
                   </Text>
                   <Text style={styles.text}>
-                    Address:
-                    <Text fontWeight="400">{data?.Address}</Text>
-                  </Text>
-                  <Text style={styles.text}>
                     Confirmation:
                     <Text fontWeight="400">{data?.confirmation}</Text>
                   </Text>
                   <Text style={styles.text}>
                     Date: 
                     <Text fontWeight="400">{moment(data?.createdAt).format('MM/DD/YYYY')}</Text>
+                  </Text>
+                  <Text style={styles.text}>
+                    Gender:
+                    <Text fontWeight="400">{data?.Gender}</Text>
                   </Text>
                 </Box>
               </Box>

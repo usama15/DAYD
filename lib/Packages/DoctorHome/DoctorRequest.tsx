@@ -52,6 +52,7 @@ const DoctorRequest = () => {
       Address: item.Address,
       confirmation: 'Accpet',
       History: 'false',
+      Gender: item.Gender
     };
     await OrderConform(data).then((res: any) => {
       if (res.success == true) {
@@ -68,6 +69,7 @@ const DoctorRequest = () => {
       Address: item.Address,
       confirmation: 'Reject',
       History: 'true',
+      Gender: item.Gender
     };
     await OrderConform(data).then((res: any) => {
       if (res.success == true) {
@@ -105,6 +107,10 @@ const DoctorRequest = () => {
                     <Text fontWeight="400">
                       {moment(data?.createdAt).format('MM/DD/YYYY')}
                     </Text>
+                  </Text>
+                  <Text style={styles.text}>
+                    Gender:
+                    <Text fontWeight="400">{data?.Gender}</Text>
                   </Text>
                   <Box w="100%" h="80">
                     <View style={styles.container}>

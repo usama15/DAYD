@@ -69,7 +69,7 @@ export default function SignIn() {
                 }}
               />
             }
-            placeholder="Username" // mx={4}
+            placeholder="Email" // mx={4}
             _light={{
               placeholderTextColor: 'blueGray.400',
             }}

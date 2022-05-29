@@ -27,7 +27,7 @@ export default function Booking(props: any) {
   const {info} = props?.route?.params;
   const navigation = useNavigation();
   const [name, setName] = React.useState('');
-  const [number, setNumber] = React.useState('');
+  const [gender, setGender] = React.useState('');
   const [quality, setQuality] = React.useState('');
 
   const [udata, setUData] = useState<any>('');
@@ -47,6 +47,7 @@ export default function Booking(props: any) {
       email: udata.email,
       vendorEmail: info.email,
       Address: location,
+      Gender: gender
     };
     createOrderData(data).then((res: any) => {
       if (res.success == true) {
@@ -88,9 +89,9 @@ export default function Booking(props: any) {
                   placeholderTextColor: 'blueGray.50',
                 }}
               />
-              {/* <Input
-                onChangeText={val => setQuality(val)}
-                value={quality}
+              <Input
+                onChangeText={val => setGender(val)}
+                value={gender}
                 borderRadius="30"
                 mt="16px"
                 InputLeftElement={
@@ -106,14 +107,14 @@ export default function Booking(props: any) {
                     }}
                   />
                 }
-                placeholder="Address" // mx={4}
+                placeholder="Enter Gender" // mx={4}
                 _light={{
                   placeholderTextColor: 'blueGray.400',
                 }}
                 _dark={{
                   placeholderTextColor: 'blueGray.50',
                 }}
-              /> */}
+              />
               <Box width="50%" mt="5">
                 <VStack space={3}>
                   <Button borderRadius="30" h="48px" onPress={() => Submit()}>

@@ -20,6 +20,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/core';
 import {removeStorage, getDataFromPhone} from '../../utils/localStore';
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
+import { Linking } from 'react-native';
 export default function profile() {
   const [data, setData] = useState('');
   useEffect(() => {
@@ -355,6 +356,10 @@ export default function profile() {
                   }}
                 />
               ) : null}
+            </Box>
+            <Box flexDirection='row'>
+              <Button w='49%' mr='2' onPress={() => {Linking.openURL('tel:+923126730708')}}>Support</Button>
+              <Button w='49%' onPress={() => {Linking.openURL('tel:15')}}>Emergency</Button>
             </Box>
             <Button
               style={styles.btn}
