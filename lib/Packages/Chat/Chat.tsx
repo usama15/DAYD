@@ -10,8 +10,6 @@ import {
   Alert,
   Pressable,
 } from 'react-native';
-// Import the UI styles.
-// import styles from './components/Style'
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getDataFromPhone} from '../../utils/localStore';
 import {GiftedChat} from 'react-native-gifted-chat';
@@ -21,14 +19,8 @@ import moment from 'moment';
 
 export default function Chat(props: any) {
   const isFocused = useIsFocused();
-  //   const chat = useRef(null);
-  // const [roomId, setRoomId] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [companyId, setCompanyId] = useState('0');
   const [currentUser, setCurrentUser] = useState();
-  const [currentUserId, setCurrentUserId] = useState();
   const [messages, setMessages] = useState([]);
-  const [chatRoom, setChatRoom] = useState({});
   const {chat} = props?.route?.params;
   console.log(chat);
   useEffect(() => {

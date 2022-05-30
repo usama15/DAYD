@@ -11,12 +11,9 @@ import {
   View,
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
-import Axios from 'axios';
 import styles from '../main.style';
 import {getDataFromPhone} from '../../utils/localStore';
-import firestore from '@react-native-firebase/firestore';
 import {ActivityIndicator} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {GetOrderData, OrderConform, deleteOrder} from './duck/operations';
 import moment from 'moment';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -50,7 +47,7 @@ const DoctorRequest = () => {
       email: item.email,
       vendorEmail: item.vendorEmail,
       Address: item.Address,
-      confirmation: 'Accpet',
+      confirmation: 'Accept',
       History: 'false',
       Gender: item.Gender
     };
@@ -134,7 +131,7 @@ const DoctorRequest = () => {
                   </Box>
                   <Box flexDirection="row" mt="3">
                     <Button w="50%" mr="1" onPress={() => Accpet(data)}>
-                      Accpet
+                      Accept
                     </Button>
                     <Button w="50%" onPress={() => Reject(data)}>
                       Reject

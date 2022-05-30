@@ -120,6 +120,19 @@ export default function VentorChatMain(props: any) {
         user={{
           _id: currentUser !== undefined ? currentUser?._id : '',
         }}
+        renderDay={(props) => (
+          <View >
+            <Text>
+            </Text>
+          </View>
+        )}
+        renderTime={(props) => (
+          <View >
+            <Text style={{marginHorizontal: 10, marginBottom: 5}}>
+              {`${props.currentMessage.createdAt.toDate().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`}
+            </Text>
+          </View>
+        )}
       />
     </View>
   );

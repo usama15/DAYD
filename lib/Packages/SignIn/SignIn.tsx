@@ -15,8 +15,6 @@ import React, {useState, useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import styles from './SignIn.style';
 import {useNavigation} from '@react-navigation/native';
-
-// import { SignInUser } from '../duck/operations';
 import {Alert, ActivityIndicator} from 'react-native';
 import RoutesKey from '../../Components/Navigation/Route/routesKey';
 import {SignInUser} from './duck/operations';
@@ -27,7 +25,6 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [uData, setUdata] = useState([]);
 
-  // const Email = uData.filter(x => x.email == email).map((data) => data.email)
 
   const Login = () => {
     let data = {
@@ -81,7 +78,7 @@ export default function SignIn() {
             onChangeText={val => setPassword(val)}
             InputLeftElement={
               <Icon
-                as={<FontAwesome5 name="lock" outli={false} outline />}
+                as={<FontAwesome5 name="lock"/>}
                 size="4"
                 m={4}
                 _light={{

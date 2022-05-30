@@ -54,7 +54,7 @@ const AmbulanceRequest = () => {
       email: item.email,
       vendorEmail: item.vendorEmail,
       Address: item.Address,
-      confirmation: 'Accpet',
+      confirmation: 'Accept',
       History: 'true',
       Gender: item.Gender
     };
@@ -138,7 +138,7 @@ const AmbulanceRequest = () => {
                   </Box>
                   <Box flexDirection="row" mt="3">
                     <Button w="50%" mr="1" onPress={() => Accpet(data)}>
-                      Accpet
+                      Accept
                     </Button>
                     <Button w="50%" onPress={() => Reject(data)}>
                       Reject

@@ -13,7 +13,6 @@ import React, {useEffect, useState} from 'react';
 import Axios from 'axios';
 import styles from '../main.style';
 import {getDataFromPhone} from '../../utils/localStore';
-import firestore from '@react-native-firebase/firestore';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {GetConformOrderData} from './duck/operations';
