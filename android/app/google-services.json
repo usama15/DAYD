@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "852258016232",
     "project_id": "dayd-ce3d2",
-    "storage_bucket": "dayd-ce3d2.appspot.com"
+    "storage_bucket": "gs://dayd-ce3d2.appspot.com"
   },
   "client": [
     {

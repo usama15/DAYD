@@ -112,10 +112,7 @@ const AmbulanceRequest = () => {
                       {moment(data?.createdAt).format('MM/DD/YYYY')}
                     </Text>
                   </Text>
-                  <Text style={styles.text}>
-                    Gender:
-                    <Text fontWeight="400">{data?.Gender}</Text>
-                  </Text>
+                  
                   <Box w="100%" h="80">
                     <View style={styles.container}>
                       <MapView

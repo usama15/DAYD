@@ -22,9 +22,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {postDoctorData} from './duck/operations';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
+
 const DoctorRegistar = () => {
-  const [show, setShow] = React.useState(false);
-  const [show1, setShow1] = React.useState(false);
+  const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
   const navigation = useNavigation();
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,108 +37,105 @@ const DoctorRegistar = () => {
   const [conformPincode, setConformPincode] = useState('');
   const [Img, setImg] = useState('');
   const [Img1, setImg1] = useState('');
-  let [service, setService] = React.useState('');
+  const [Img3, setImg3] = useState('');
+  const [newimage, setnewimage] = useState('');
+  const [Img4, setImg4] = useState('');
+  const [newimage2, setnewimage2] = useState('');
+  let [service, setService] = useState('');
+
   const uploadImgOne = () => {
-    const options = {
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const uri = response.assets[0].uri;
-        const type = response.assets[0].type;
-        const name = response.assets[0].fileName;
-        const source = {
-          uri,
-          type,
-          name,
-        };
-        cloudinaryUploadOne(source);
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(async image => {
+      console.log(image);
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImg3(imageUri);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      const reference = storage().ref(imgName);
+      setnewimage(imgName);
+      try {
+        reference.putFile(imageUri).then(() => {
+          alert('Image Stored');
+        });
+        // .then(() => {
+        //    setTimeout(getImageURL, 15000);
+        // });
+      } catch (error) {
+        console.log(error);
       }
     });
   };
 
-  const cloudinaryUploadOne = image => {
-    const data = new FormData();
-    data.append('file', image);
-    data.append('upload_preset', 'hl08r4ih');
-    data.append('cloud_name', 'da6xurnwg');
-    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
-      method: 'post',
-      body: data,
-    })
-      .then(res => res.json())
-      .then(data => {
-        setImg(data.url);
+  async function getImageURL() {
+    return await storage()
+      .ref(newimage)
+      .getDownloadURL()
+      .then(uri => {
+        setImg(uri);
+        return uri;
       })
-      .then(async () => await alert('Submit'))
-      .catch(err => {
-        alert(err);
-      });
-  };
+      .catch(e => console.log(e));
+  }
+
   const uploadImgTwo = () => {
-    const options = {
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const uri = response.assets[0].uri;
-        const type = response.assets[0].type;
-        const name = response.assets[0].fileName;
-        const source = {
-          uri,
-          type,
-          name,
-        };
-        cloudinaryUploadTwo(source);
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(async image => {
+      console.log(image);
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImg4(imageUri);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      const reference = storage().ref(imgName);
+      setnewimage2(imgName);
+      try {
+        reference.putFile(imageUri).then(() => {
+          alert('Image Stored');
+        });
+        // .then( () => {
+        //    setTimeout(getImageURL2, 9000);
+        // });
+      } catch (error) {
+        console.log(error);
       }
     });
   };
 
-  const cloudinaryUploadTwo = image => {
-    const data = new FormData();
-    data.append('file', image);
-    data.append('upload_preset', 'hl08r4ih');
-    data.append('cloud_name', 'da6xurnwg');
-    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
-      method: 'post',
-      body: data,
-    })
-      .then(res => res.json())
-      .then(data => {
-        setImg1(data.url);
+  async function getImageURL2() {
+    return await storage()
+      .ref(newimage2)
+      .getDownloadURL()
+      .then(uri => {
+        setImg1(uri);
+        return uri;
       })
-      .then(async () => await alert('Submit'))
-      .catch(err => {
-        alert(err);
-      });
-  };
-
+      .catch(e => console.log(e));
+  }
   const Login = () => {
-    let data = {
-      username: userName,
-      email: email,
-      phoneNo: phoneNo,
-      password: pincode,
-      userType: 'doctor',
-      cnicNumber: cnicNumber,
-      drCert: Img,
-      userImage: Img1,
-      drType:service
-    };
-    console.log(data);
-    if (pincode == conformPincode) {
-      postDoctorData(data).then(() => navigation.pop());
-    } else {
-      alert('Password Wrong');
-    }
+    getImageURL().then(res => {
+      getImageURL2().then(res2 => {
+        let data = {
+          username: userName,
+          email: email,
+          phoneNo: phoneNo,
+          password: pincode,
+          userType: 'doctor',
+          cnicNumber: cnicNumber,
+          drCert: res,
+          userImage: res2,
+          drType: service,
+        };
+        console.log(data);
+        if (pincode == conformPincode) {
+          postDoctorData(data).then(() => navigation.pop());
+        } else {
+          alert('Password Wrong');
+        }
+      });
+    });
   };
 
   return (
@@ -220,6 +220,7 @@ const DoctorRegistar = () => {
                 onChangeText={val => setPhoneNo(val)}
                 borderRadius="30"
                 mt="16px"
+                maxLength={11}
                 keyboardType="numeric"
                 InputLeftElement={
                   <Icon
@@ -246,6 +247,7 @@ const DoctorRegistar = () => {
                 onChangeText={val => setCnicNumber(val)}
                 borderRadius="30"
                 mt="16px"
+                maxLength={13}
                 keyboardType="numeric"
                 InputLeftElement={
                   <Icon

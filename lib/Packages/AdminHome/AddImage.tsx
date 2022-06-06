@@ -15,70 +15,75 @@ import {
   deleteSilderImage,
   getImagesData,
 } from './duck/operations';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const AddImage = () => {
   const [img, setImg] = useState('');
+  const [img1, setImg1] = useState('');
   const [imgData, setImgData] = useState('');
   const [name, setName] = useState('');
+  const [newimage, setnewimage] = useState('');
 
   useEffect(() => {
     getImagesData().then(res => {
       setImgData(res);
     });
-  }, [imgData]);
+  }, []);
   const uploadImgOne = () => {
-    const options = {
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const uri = response.assets[0].uri;
-        const type = response.assets[0].type;
-        const name = response.assets[0].fileName;
-        const source = {
-          uri,
-          type,
-          name,
-        };
-        cloudinaryUploadOne(source);
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(async image => {
+      console.log(image);
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImg1(imageUri);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      const reference = storage().ref(imgName);
+      setnewimage(imgName);
+      try {
+        reference
+          .putFile(imageUri)
+          .then(() => {
+            alert('Image Stored');
+          })
+          .then(async () => {
+            // await getImageURL();
+          });
+      } catch (error) {
+        console.log(error);
       }
     });
   };
 
-  const cloudinaryUploadOne = image => {
-    const data = new FormData();
-    data.append('file', image);
-    data.append('upload_preset', 'hl08r4ih');
-    data.append('cloud_name', 'da6xurnwg');
-    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
-      method: 'post',
-      body: data,
-    })
-      .then(res => res.json())
-      .then(data => {
-        setImg(data.url);
+  async function getImageURL() {
+    return await storage()
+      .ref(newimage)
+      .getDownloadURL()
+      .then(uri => {
+        setImg(uri);
+        return uri;
       })
-      .then(async () => await alert('Submit'))
-      .catch(err => {
-        alert(err);
-      });
-  };
+      .catch(e => console.log(e));
+  }
 
   const submit = () => {
-    let data = {
-      Image: img,
-      Name: name,
-    };
-    SilderImagePost(data).then(() => {setName('')})
+    getImageURL().then(res => { 
+
+      let data = {
+        Image: res,
+        Name: name,
+      };
+      SilderImagePost(data).then(() => {
+        setName('');
+      });
+    })
   };
   const DeleteImage = id => {
     deleteSilderImage(id);
   };
-  console.log(imgData);
+  // console.log(imgData);
   return (
     <ScrollView>
       <Center mt="5" px="3">
@@ -103,22 +108,35 @@ const AddImage = () => {
             </Box>
           </Box>
           <Box>
-            {imgData.length && imgData.map((item, index) => (
-              <Box p='2' flexDirection="row" mt="4" borderRadius="10" bg="white">
-                <Image
-                  ml="5"
-                  h="40"
-                  w="40%"
-                  resizeMode="contain"
-                  alt='img'
-                  source={{uri: item.Image}}
-                />
-                <Box mt='5' ml='2'>
-                  <Text mb='5' mt='2' fontSize="18">Name: {item.Name}</Text>
-                  <Button borderRadius="10" h="38px" onPress={() => DeleteImage(item?._id)}>Delete</Button>
+            {imgData.length &&
+              imgData.map((item, index) => (
+                <Box
+                  p="2"
+                  flexDirection="row"
+                  mt="4"
+                  borderRadius="10"
+                  bg="white">
+                  <Image
+                    ml="5"
+                    h="40"
+                    w="40%"
+                    resizeMode="contain"
+                    alt="img"
+                    source={{uri: item.Image}}
+                  />
+                  <Box mt="5" ml="2" w="50%">
+                    <Text mb="5" mt="2" fontSize="18">
+                      Name: {item.Name}
+                    </Text>
+                    <Button
+                      borderRadius="10"
+                      h="38px"
+                      onPress={() => DeleteImage(item?._id)}>
+                      Delete
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
           </Box>
         </Box>
       </Center>

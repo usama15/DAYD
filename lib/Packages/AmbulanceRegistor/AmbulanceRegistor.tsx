@@ -17,8 +17,10 @@ import {
 } from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {postAmbulanceData} from './duck/operations';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
+
 const AmbulanceRegistor = () => {
   const [show, setShow] = React.useState(false);
   const [show1, setShow1] = React.useState(false);
@@ -28,122 +30,109 @@ const AmbulanceRegistor = () => {
   const [phoneNo, setPhoneNo] = useState('');
   const [cnicNumber, setCnicNumber] = useState('');
   const [vehicleNumber, setVehicleNumber] = useState('');
-  const [licenseNumber, setLicenseNumber] = useState('');
   const [Address, setAddress] = useState('');
   const [pincode, setPincode] = useState('');
   const [conformPincode, setConformPincode] = useState('');
   const [Img, setImg] = useState('');
+  const [newimage, setnewimage] = useState('');
+  const [Img2, setImg2] = useState('');
+  const [newimage2, setnewimage2] = useState('');
+
   const uploadImgOne = () => {
-    const options = {
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const uri = response.assets[0].uri;
-        const type = response.assets[0].type;
-        const name = response.assets[0].fileName;
-        const source = {
-          uri,
-          type,
-          name,
-        };
-        cloudinaryUploadOne(source);
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(async image => {
+      console.log(image);
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImg(imageUri);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      const reference = storage().ref(imgName);
+      setnewimage(imgName);
+      try {
+        reference.putFile(imageUri).then(() => {
+          alert('Image Stored');
+        });
+      } catch (error) {
+        console.log(error);
       }
     });
   };
 
-  const cloudinaryUploadOne = image => {
-    const data = new FormData();
-    data.append('file', image);
-    data.append('upload_preset', 'hl08r4ih');
-    data.append('cloud_name', 'da6xurnwg');
-    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
-      method: 'post',
-      body: data,
-    })
-      .then(res => res.json())
-      .then(data => {
-        setImg(data.url);
+  async function getImageURL() {
+    return await storage()
+      .ref(newimage)
+      .getDownloadURL()
+      .then(uri => {
+        return uri;
       })
-      .then(async () => await alert('Submit'))
-      .catch(err => {
-        alert(err);
-      });
-  };
+      .catch(e => console.log(e));
+  }
+
   const uploadImgTwo = () => {
-    const options = {
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const uri = response.assets[0].uri;
-        const type = response.assets[0].type;
-        const name = response.assets[0].fileName;
-        const source = {
-          uri,
-          type,
-          name,
-        };
-        cloudinaryUploadTwo(source);
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(async image => {
+      console.log(image);
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImg2(imageUri);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      const reference = storage().ref(imgName);
+      setnewimage2(imgName);
+      try {
+        reference.putFile(imageUri).then(() => {
+          alert('Image Stored');
+        });
+      } catch (error) {
+        console.log(error);
       }
     });
   };
 
-  const cloudinaryUploadTwo = image => {
-    const data = new FormData();
-    data.append('file', image);
-    data.append('upload_preset', 'hl08r4ih');
-    data.append('cloud_name', 'da6xurnwg');
-    fetch('https://api.cloudinary.com/v1_1/da6xurnwg/upload', {
-      method: 'post',
-      body: data,
-    })
-      .then(res => res.json())
-      .then(data => {
-        setLicenseNumber(data.url);
+  async function getImageURL2() {
+    return await storage()
+      .ref(newimage2)
+      .getDownloadURL()
+      .then(uri => {
+        return uri;
       })
-      .then(async () => await alert('Submit'))
-      .catch(err => {
-        alert(err);
-      });
-  };
+      .catch(e => console.log(e));
+  }
 
   const Login = () => {
-    let data = {
-      username: userName,
-      email: email,
-      phoneNo: phoneNo,
-      password: pincode,
-      userType: 'ambulance',
-      cnicNumber: cnicNumber,
-      vehicleNumber: vehicleNumber,
-      LicenseNumber: licenseNumber,
-      Address: Address,
-      userImage: Img,
-    };
-    console.log(data);
-    if (pincode == conformPincode) {
-      postAmbulanceData(data).then(() => navigation.pop());
-    } else {
-      alert('Password Wrong');
-    }
+    getImageURL().then(res => {
+      getImageURL2().then(res1 => {
+        let data = {
+          username: userName,
+          email: email,
+          phoneNo: phoneNo,
+          password: pincode,
+          userType: 'ambulance',
+          cnicNumber: cnicNumber,
+          vehicleNumber: vehicleNumber,
+          LicenseNumber: res1,
+          Address: Address,
+          userImage: res,
+        };
+        console.log(data);
+        if (pincode == conformPincode) {
+          postAmbulanceData(data).then(() => navigation.pop());
+        } else {
+          alert('Password Wrong');
+        }
+      });
+    });
   };
 
   return (
     <ScrollView>
       <Center flex={1} px="3">
         <Box w="100%" p="10px">
-          <Box  height="100%">
+          <Box height="100%">
             <Center>
-              {/* <Image source={QuenoTextIcon} alt="Alternate Text" /> */}
               <Text
                 fontSize="24"
                 fontFamily="Merriweather"
@@ -154,10 +143,15 @@ const AmbulanceRegistor = () => {
               <Heading mt="20px" mb="20px" size="sm">
                 Registration form for Ambulance
               </Heading>
-              <Box mb='10'>
-                <Avatar size="xl" source={{uri : Img}}/>
+              <Box mb="10">
+                <Avatar size="xl" source={{uri: Img}} />
                 <TouchableOpacity onPress={() => uploadImgOne()}>
-                <Icon ml='auto' mt='-2' size='4' as={<FontAwesome5 name="edit" />}/>
+                  <Icon
+                    ml="auto"
+                    mt="-2"
+                    size="4"
+                    as={<FontAwesome5 name="edit" />}
+                  />
                 </TouchableOpacity>
               </Box>
               <Input
@@ -213,6 +207,7 @@ const AmbulanceRegistor = () => {
                 onChangeText={val => setPhoneNo(val)}
                 borderRadius="30"
                 mt="16px"
+                maxLength={11}
                 keyboardType="numeric"
                 InputLeftElement={
                   <Icon
@@ -239,6 +234,7 @@ const AmbulanceRegistor = () => {
                 onChangeText={val => setCnicNumber(val)}
                 borderRadius="30"
                 mt="16px"
+                maxLength={13}
                 keyboardType="numeric"
                 InputLeftElement={
                   <Icon
